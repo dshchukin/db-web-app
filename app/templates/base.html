@@ -1,0 +1,12 @@
+<html>
+  <head>
+    {% if title %}
+    <title>{{title}} - Database web interface</title>
+    {% else %}
+    <title>Database web interface</title>
+    {% endif %}
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>
