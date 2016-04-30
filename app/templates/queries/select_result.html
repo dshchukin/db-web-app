@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Hello, {{user.nickname}}!</h1>
+<h1>Select query result</h1>
+<ul>
+    {% for line in result %}
+        <li>{{ line }} </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

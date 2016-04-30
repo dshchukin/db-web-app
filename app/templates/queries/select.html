@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Hello, {{user.nickname}}!</h1>
+<h1>Select query</h1>
+<form action="/query/select" method="POST">
+		<p><b>Table</b><br>
+        <input type="text" name="table">
+        <input type="submit" name="my-form" value="Send">
+</form>
+{% endblock %}

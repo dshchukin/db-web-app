@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Hello, {{user.nickname}}!</h1>
+<h1>Insert query</h1>
+<form action="/query/insert" method="POST">
+		{% if tables %}
+			<p><b>Choose table:</b><br>
+			<select name="table" size="1">
+				{% for table in tables %}
+				    <option value={{table}}>{{table}}</option>
+				{% endfor %}
+			</select>
+		{% endif %}
+		{% if columns %}
+	    <ul>
+	    {% for column in columns %}
+	        <p><b>{{column}}:</b><br>
+        	<input type="text" name="{{column}}">
+	    {% endfor %}
+	    </ul>
+	    {% endif %}
+	    {% if columns or tables %}
+       	 <input type="submit" name="my-form" value="Send">
+        {% endif %}
+</form>
+{% endblock %}
