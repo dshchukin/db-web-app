@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Hello, {{user.nickname}}!</h1>
 <h1>Insert query</h1>
 <form action="/query/insert" method="POST">
 		{% if tables %}
@@ -20,7 +19,7 @@
 	    </ul>
 	    {% endif %}
 	    {% if columns or tables %}
-       	 <input type="submit" name="my-form" value="Send">
+       		<input type="submit" name="my-form" value="Send">
         {% endif %}
 </form>
 {% endblock %}

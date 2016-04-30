@@ -17,6 +17,12 @@ class Coach(Base):
     	self.id = args.pop()
        	self.category = args.pop()
        	self.datestart = args.pop()
+    def __str__(self):
+    	return ("<Coach:" + 
+    		"\n\tid=" + str(self.id) + 
+    		"\n\tcategory=" + str(self.category) + 
+    		"\n\tdatestart=" + str(self.datestart) + 
+    		"\n>")
 class Coaching(Base):
     __table__ = Base.metadata.tables['Coaching']
     def __init__(self, args):
@@ -81,6 +87,22 @@ class Human(Base):
        	self.last_medical_exam = args.pop()
        	self.insurance_num = args.pop()
        	self.insurance_expires = args.pop()
+    def __str__(self):
+    	return ("<Human:" +
+    		"\nid=" + str(self.id) + 
+    		"\n\tfirstname=" + str(self.firstname) + 
+    		"\n\tmiddlename=" + str(self.middlename) + 
+    		"\n\tsurname=" + str(self.surname) + 
+    		"\n\tTIN=" + str(self.TIN) + 
+    		"\n\tphone=" + str(self.phone) + 
+    		"\n\taddress=" + str(self.address) + 
+    		"\n\tcountry=" + str(self.country) + 
+    		"\n\tcity=" + str(self.city) + 
+    		"\n\tdiploma=" + str(self.diploma) + 
+    		"\n\tlast_medical_exam=" + str(self.last_medical_exam) + 
+    		"\n\tinsurance_num=" + str(self.insurance_num) + 
+    		"\n\tinsurance_expires=" + str(self.insurance_expires) + 
+    		"\n>")
 class Judge(Base):
     __table__ = Base.metadata.tables['Judge']
     def __init__(self, args):

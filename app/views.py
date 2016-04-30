@@ -90,7 +90,8 @@ def select_query():
     user = 'Denis' # user's nickname example
     return render_template('queries/select.html', 
         title = 'Select query',
-        user = user)
+        user = user,
+        tables = Base.metadata.tables.keys())
 
 @app.route('/query/select', methods = ['POST'])
 def select_query_post():
@@ -99,11 +100,12 @@ def select_query_post():
     flash('Select from ' + table)
     lines = []
     for line in db.session.query(map_table(table)):
-        lines.append(line)
+        lines.append(str(line))
     return render_template('queries/select_result.html', 
         title = 'Select query result',
         user = user,
-        result = lines)
+        result = lines,
+        tables = [table])
 
 def map_table(table):
     if table == 'Human':
