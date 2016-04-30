@@ -32,6 +32,14 @@ class Coaching(Base):
        	self.coach = args.pop()
        	self.datestart = args.pop()
        	self.dateend = args.pop()
+    def __str__(self):
+    	return ("<Coaching:" +
+    		"\nid=" + str(self.id) + 
+    		"\n\tsportsman=" + str(self.sportsman) + 
+    		"\n\tcoach=" + str(self.coach) + 
+    		"\n\tdatestart=" + str(self.datestart) + 
+    		"\n\tdateend=" + str(self.dateend) + 
+    		"\n>")
 class Competition(Base):
     __table__ = Base.metadata.tables['Competition']
     def __init__(self, args):
@@ -237,26 +245,60 @@ def create_new_record(table, args):
 	if table == 'Transfer':
 		return Transfer(args)
 
+def map_table(table):
+    if table == 'Coach':
+        return Coach
 
+    if table == 'Coaching':
+        return Coaching
+
+    if table == 'Competition':
+        return Competition
+
+    if table == 'Exam':
+        return Exam
+
+    if table == 'Examined':
+        return Examined
+
+    if table == 'Examiners':
+        return Examiners
+
+    if table == 'Human':
+        return Human
+
+    if table == 'Judge':
+        return Judge
+
+    if table == 'Result_judge':
+        return Result_judge
+
+    if table == 'Result_sportsman':
+        return Result_sportsman
+
+    if table == 'Seminar':
+        return Seminar
+
+    if table == 'Seminar_participating':
+        return Seminar_participating
+
+    if table == 'Seminar_type':
+        return Seminar_type
+
+    if table == 'Sportsman':
+        return Sportsman
+
+    if table == 'Structure':
+        return Structure
+
+    if table == 'Structure_type':
+        return Structure_type
+
+    if table == 'Transfer':
+        return Transfer
+    
+    return 0
+    
 #print(Base.metadata.tables.keys())
 #print(Base.metadata.tables['Human'].columns)
 #print(len(Base.metadata.tables['Human'].columns))
-
-#class Human(db.Model):
-#   id = db.Column(db.Integer, primary_key = True)
-#   firstname = db.Column(db.String(64))
-#   middlename = db.Column(db.String(64))
-#   surname = db.Column(db.String(64), unique = True)
-    #birthdate = db.Column(db.String(64))
-    #TIN = db.Column(db.String(64))
-    #phone = db.Column(db.String(64))
-    #address = db.Column(db.String(64))
-    #country = db.Column(db.String(64))
-    #city = db.Column(db.String(64))
-    #diploma = db.Column(db.Integer)
-    #last_medical_exam = db.Column(db.String(64))
-    #insurance_num = db.Column(db.String(64))
-    #insurance_expires = db.Column(db.String(64))
-
-#    def __repr__(self):
-#        return '<Human %r %r>' % (self.firstname, self.surname)

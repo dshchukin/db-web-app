@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Hello, {{user}}!</h1>
 {% for comp in competitions %}
 <p><b>{{comp.name}}</b> at <hl>{{comp.date}}</hl> </p>
 {% endfor %}

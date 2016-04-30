@@ -97,6 +97,7 @@ def select_query():
 def select_query_post():
     user = 'Denis' # user's nickname example
     table = request.form['table']
+    print(map_table(table))
     flash('Select from ' + table)
     lines = []
     for line in db.session.query(map_table(table)):
@@ -107,8 +108,3 @@ def select_query_post():
         result = lines,
         tables = [table])
 
-def map_table(table):
-    if table == 'Human':
-        return Human
-    else:
-        return 0
