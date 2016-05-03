@@ -2,6 +2,16 @@ from app import db
 
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_utils import *
+
+from sqlalchemy.engine import Engine
+from sqlalchemy import event
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 engine = create_engine('sqlite:///app_data.db', echo = True)
 #meta = MetaData(bind=engine)
@@ -17,12 +27,8 @@ class Coach(Base):
     	self.id = args.pop()
        	self.category = args.pop()
        	self.datestart = args.pop()
-    def __str__(self):
-    	return ("<Coach:" + 
-    		"\n\tid=" + str(self.id) + 
-    		"\n\tcategory=" + str(self.category) + 
-    		"\n\tdatestart=" + str(self.datestart) + 
-    		"\n>")
+    def data(self):
+    	return [self.id, self.category, self.datestart]
 class Coaching(Base):
     __table__ = Base.metadata.tables['Coaching']
     def __init__(self, args):
@@ -32,14 +38,8 @@ class Coaching(Base):
        	self.coach = args.pop()
        	self.datestart = args.pop()
        	self.dateend = args.pop()
-    def __str__(self):
-    	return ("<Coaching:" +
-    		"\nid=" + str(self.id) + 
-    		"\n\tsportsman=" + str(self.sportsman) + 
-    		"\n\tcoach=" + str(self.coach) + 
-    		"\n\tdatestart=" + str(self.datestart) + 
-    		"\n\tdateend=" + str(self.dateend) + 
-    		"\n>")
+    def data(self):
+    	return [self.id, self.sportsman, self.coach, self.datestart, self.dateend]
 class Competition(Base):
     __table__ = Base.metadata.tables['Competition']
     def __init__(self, args):
@@ -50,6 +50,8 @@ class Competition(Base):
        	self.status = args.pop()
        	self.datestart = args.pop()
        	self.dateend = args.pop()
+    def data(self):
+    	return [self.id, self.name, self.place, self.status, self.datestart, self.dateend]
 class Exam(Base):
     __table__ = Base.metadata.tables['Exam']
     def __init__(self, args):
@@ -57,6 +59,8 @@ class Exam(Base):
     	self.id = args.pop()
        	self.date = args.pop()
        	self.place = args.pop()
+    def data(self):
+    	return [self.id, self.date, self.place]
 class Examined(Base):
     __table__ = Base.metadata.tables['Examined']
     def __init__(self, args):
@@ -64,12 +68,16 @@ class Examined(Base):
     	self.id = args.pop()
        	self.result = args.pop()
        	self.exam_id = args.pop()
+    def data(self):
+    	return [self.id, self.result, self.exam_id]
 class Examiners(Base):
     __table__ = Base.metadata.tables['Examiners']
     def __init__(self, args):
     	args = list(reversed(args))
     	self.human_id = args.pop()
        	self.exam_id = args.pop()
+    def data(self):
+    	return [self.id, self.human_id, self.result_id]
 class Gym(Base):
     __table__ = Base.metadata.tables['Gym']
     def __init__(self, args):
@@ -77,6 +85,8 @@ class Gym(Base):
     	self.id = args.pop()
        	self.structure = args.pop()
        	self.address = args.pop()
+    def data(self):
+    	return [self.id, self.structure, self.address]
 class Human(Base):
     __table__ = Base.metadata.tables['Human']
     def __init__(self, args):
@@ -95,22 +105,8 @@ class Human(Base):
        	self.last_medical_exam = args.pop()
        	self.insurance_num = args.pop()
        	self.insurance_expires = args.pop()
-    def __str__(self):
-    	return ("<Human:" +
-    		"\nid=" + str(self.id) + 
-    		"\n\tfirstname=" + str(self.firstname) + 
-    		"\n\tmiddlename=" + str(self.middlename) + 
-    		"\n\tsurname=" + str(self.surname) + 
-    		"\n\tTIN=" + str(self.TIN) + 
-    		"\n\tphone=" + str(self.phone) + 
-    		"\n\taddress=" + str(self.address) + 
-    		"\n\tcountry=" + str(self.country) + 
-    		"\n\tcity=" + str(self.city) + 
-    		"\n\tdiploma=" + str(self.diploma) + 
-    		"\n\tlast_medical_exam=" + str(self.last_medical_exam) + 
-    		"\n\tinsurance_num=" + str(self.insurance_num) + 
-    		"\n\tinsurance_expires=" + str(self.insurance_expires) + 
-    		"\n>")
+    def data(self):
+		return [self.id, self.firstname, self.middlename, self.surname, self.birthdate, self.TIN, self.phone, self.address, self.country, self.city, self.diploma, self.last_medical_exam, self.insurance_num, self.insurance_expires]
 class Judge(Base):
     __table__ = Base.metadata.tables['Judge']
     def __init__(self, args):
@@ -118,6 +114,8 @@ class Judge(Base):
     	self.id = args.pop()
        	self.category = args.pop()
        	self.datestart = args.pop()
+    def data(self):
+    	return [self.id, self.category, self.datestart]
 class Result_judge(Base):
     __table__ = Base.metadata.tables['Result_judge']
     def __init__(self, args):
@@ -126,6 +124,8 @@ class Result_judge(Base):
        	self.result = args.pop()
        	self.competition = args.pop()
        	self.post = args.pop()
+    def data(self):
+    	return [self.id, self.result, self.competition, self.post]
 class Result_sportsman(Base):
     __table__ = Base.metadata.tables['Result_sportsman']
     def __init__(self, args):
@@ -134,6 +134,8 @@ class Result_sportsman(Base):
        	self.result = args.pop()
        	self.competition = args.pop()
        	self.sportsman = args.pop()
+    def data(self):
+    	return [self.id, self.result, self.competition, self.sportsman]
 class Seminar(Base):
     __table__ = Base.metadata.tables['Seminar']
     def __init__(self, args):
@@ -146,18 +148,24 @@ class Seminar(Base):
        	self.dateend = args.pop()
        	self.org_structure = args.pop()
        	self.org_human = args.pop()
+    def data(self):
+    	return [self.id, self.type, self.name, self.place, self.datestart, self.dateend, self.org_structure, self.org_human]
 class Seminar_participating(Base):
     __table__ = Base.metadata.tables['Seminar_participating']
     def __init__(self, args):
     	args = list(reversed(args))
     	self.human_id = args.pop()
        	self.seminar_id = args.pop()
+    def data(self):
+    	return [self.id, self.human_id, self.seminar_id]
 class Seminar_type(Base):
     __table__ = Base.metadata.tables['Seminar_type']
     def __init__(self, args):
     	args = list(reversed(args))
     	self.type_id = args.pop()
        	self.type_name = args.pop()
+    def data(self):
+    	return [self.id, self.type_id, self.type_name]
 class Sportsman(Base):
     __table__ = Base.metadata.tables['Sportsman']
     def __init__(self, args):
@@ -165,6 +173,8 @@ class Sportsman(Base):
     	self.id = args.pop()
        	self.category = args.pop()
        	self.datestart = args.pop()
+    def data(self):
+    	return [self.id, self.category, self.datestart]
 class Structure(Base):
     __table__ = Base.metadata.tables['Structure']
     def __init__(self, args):
@@ -174,12 +184,16 @@ class Structure(Base):
        	self.name = args.pop()
        	self.status = args.pop()
        	self.upper_structure = args.pop()
+    def data(self):
+    	return [self.id, self.type, self.name, self.status, self.upper_structure]
 class Structure_type(Base):
     __table__ = Base.metadata.tables['Structure_type']
     def __init__(self, args):
     	args = list(reversed(args))
     	self.type_id = args.pop()
        	self.type_name = args.pop()
+    def data(self):
+    	return [self.id, self.type_id, self.type_name]
 class Transfer(Base):
     __table__ = Base.metadata.tables['Transfer']
     def __init__(self, args):
@@ -189,6 +203,8 @@ class Transfer(Base):
        	self.structure = args.pop()
        	self.datestart = args.pop()
        	self.dateend = args.pop()
+    def data(self):
+    	return [self.id, self.human, self.structure, self.datestart, self.dateend]
 
 def create_new_record(table, args):
 	if table == 'Coach':
@@ -296,9 +312,19 @@ def map_table(table):
 
     if table == 'Transfer':
         return Transfer
+
+    if table == 'Gym':
+    	return Gym
     
     return 0
-    
-#print(Base.metadata.tables.keys())
+
+print(Base.metadata.tables['Coach'].columns.keys())
+for key in Base.metadata.tables['Coach'].foreign_keys:
+	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
+	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
+	print key
+	print key.column
+	print key.column.table
 #print(Base.metadata.tables['Human'].columns)
+#print(Base.metadata.tables['Human'].columns.keys())
 #print(len(Base.metadata.tables['Human'].columns))

@@ -2,9 +2,20 @@
 {% block content %}
 <h1>Hello, {{user.nickname}}!</h1>
 <h1>Select query result</h1>
-<ul>
-    {% for line in result %}
-        <li>{{ line }} </li>
-    {% endfor %}
-    </ul>
+{% if columns and result %}
+	<table border="1">
+		<tr>
+			{% for name in columns %}
+		        <th>{{ name }} </th>
+		    {% endfor %}
+	 	</tr>
+        {% for line in result %}
+        	<tr>
+	        	{% for val in line %}
+	        		<td>{{ val }} </td>
+	        	{% endfor %}
+	        </tr>
+	    {% endfor %}
+	</table>
+{% endif %}
 {% endblock %}

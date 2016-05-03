@@ -2,6 +2,10 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from app import app, db
 from models import Base
 from models import *
+import sqlalchemy
+import sqlalchemy.ext.declarative
+import sqlalchemy.orm.interfaces
+import sqlalchemy.exc
 
 @app.route('/')
 @app.route('/index')
@@ -42,6 +46,7 @@ def insert_query_post():
     user = 'Denis' # user's nickname example
     table = request.form['table']
     num_of_cols = len(Base.metadata.tables[table].columns)
+    print(len(request.form))
     if len(request.form) > 2:
         vals = []
         for column in Base.metadata.tables[table].columns:
@@ -50,23 +55,24 @@ def insert_query_post():
                 x = None
             print('get ' + str(column) + ':' + str(x) + ';')
             vals.append(x)
-        #record = Human(vals)
         record = create_new_record(table, vals)
         db.session.add(record)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except sqlalchemy.exc.SQLAlchemyError, exc:
+            reason = exc.message
+            print(reason)
+            return render_template('error.html',
+                title = 'Error',
+                user = user,
+                error_message = str(reason))
     else:
         return render_template('queries/insert.html', 
         title = 'Insert query',
         user = user,
         tables = [table],
+        fks = Base.metadata.tables[table].foreign_keys,
         columns = Base.metadata.tables[table].columns)
-    #firstname = request.form['firstname']
-    #middlename = request.form['middlename']
-    #surname = request.form['surname']
-    #flash('Insert ' + firstname + ' ' + middlename + ' ' + surname + ' into Human')
-    #human = Human(firstname = firstname, 
-    #    middlename = middlename,
-    #    surname = surname)
     return render_template('queries/insert.html', 
         title = 'Insert query',
         user = user)
@@ -97,14 +103,15 @@ def select_query():
 def select_query_post():
     user = 'Denis' # user's nickname example
     table = request.form['table']
-    print(map_table(table))
     flash('Select from ' + table)
     lines = []
     for line in db.session.query(map_table(table)):
-        lines.append(str(line))
+        print(line.data())
+        lines.append(line.data())
     return render_template('queries/select_result.html', 
         title = 'Select query result',
         user = user,
         result = lines,
+        columns = Base.metadata.tables[table].columns,
         tables = [table])
 
