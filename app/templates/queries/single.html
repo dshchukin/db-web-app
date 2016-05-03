@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Hello, {{user.nickname}}!</h1>
+<h1>Select query result</h1>
+{% if columns and result %}
+	{% for name in columns, val in line %}
+	    {{ name.key }}: {{ val }}
+	{% endfor %}
+{% endblock %}

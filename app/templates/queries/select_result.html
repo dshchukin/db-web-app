@@ -6,15 +6,15 @@
 	<table border="1">
 		<tr>
 			{% for name in columns %}
-		        <th>{{ name }} </th>
+		        <th>{{ name.key }} </th>
 		    {% endfor %}
 	 	</tr>
         {% for line in result %}
         	<tr>
-	        	{% for val in line %}
-	        		<td>{{ val }} </td>
-	        	{% endfor %}
-	        </tr>
+        	{% for val in line %}
+	        	<td> {{ val }} </td>
+	        {% endfor %}
+	       	</tr>
 	    {% endfor %}
 	</table>
 {% endif %}

@@ -43,13 +43,13 @@ class Coaching(Base):
 class Competition(Base):
     __table__ = Base.metadata.tables['Competition']
     def __init__(self, args):
-    	args = list(reversed(args))
-    	self.id = args.pop()
-       	self.name = args.pop()
-       	self.place = args.pop()
-       	self.status = args.pop()
-       	self.datestart = args.pop()
-       	self.dateend = args.pop()
+		args = list(reversed(args))
+		self.id = args.pop()
+		self.name = args.pop()
+		self.place = args.pop()
+		self.status = args.pop()
+		self.datestart = args.pop()
+		self.dateend = args.pop()
     def data(self):
     	return [self.id, self.name, self.place, self.status, self.datestart, self.dateend]
 class Exam(Base):
@@ -204,7 +204,7 @@ class Transfer(Base):
        	self.datestart = args.pop()
        	self.dateend = args.pop()
     def data(self):
-    	return [self.id, self.human, self.structure, self.datestart, self.dateend]
+        return [self.id, self.human, self.structure, self.datestart, self.dateend]
 
 def create_new_record(table, args):
 	if table == 'Coach':
@@ -318,13 +318,13 @@ def map_table(table):
     
     return 0
 
-print(Base.metadata.tables['Coach'].columns.keys())
-for key in Base.metadata.tables['Coach'].foreign_keys:
-	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
-	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
-	print key
-	print key.column
-	print key.column.table
+#print(Base.metadata.tables['Coach'].columns.keys())
+#for key in Base.metadata.tables['Coach'].foreign_keys:
+#	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
+#	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
+#	print key
+#	print key.column
+#	print key.column.table
 #print(Base.metadata.tables['Human'].columns)
 #print(Base.metadata.tables['Human'].columns.keys())
 #print(len(Base.metadata.tables['Human'].columns))
