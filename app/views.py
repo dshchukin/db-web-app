@@ -67,12 +67,25 @@ def insert_query_post():
                 user = user,
                 error_message = str(reason))
     else:
+        fks = []
+        for col in Base.metadata.tables[table].columns:
+            fk_data = []
+            print col
+            if col.foreign_keys:
+                for fk in col.foreign_keys:
+                    print fk
+                    print str(fk.column.table.name)
+                    print map_fk(str(fk.column.table.name))
+                    for line in db.session.query(map_fk(str(fk.column.table.name))):
+                        print line.short_data()
+                        fk_data.append(line.short_data())
+            fks.append(fk_data)
+            print(fks)
         return render_template('queries/insert.html', 
-        title = 'Insert query',
-        user = user,
-        tables = [table],
-        fks = Base.metadata.tables[table].foreign_keys,
-        columns = Base.metadata.tables[table].columns)
+            title = 'Insert query',
+            user = user,
+            tables = [table],
+            columns = zip(Base.metadata.tables[table].columns, fks))
     return render_template('queries/insert.html', 
         title = 'Insert query',
         user = user)

@@ -334,42 +334,64 @@ def map_table(table):
 
 def map_fk(table):
     if table == 'Human':
+        return Human
+
+    if table == 'Sportsman':
 		return Human
+
     if table == 'Coach':
         return Human
-   	if table == 'Sportsman':
-		return Human
+
     if table == 'Judge':
         return Human
+
     if table == 'Seminar':
         return Seminar
+
     if table == 'Exam':
         return Exam
+
     if table == 'Seminar_type':
         return Seminar_type
+
     if table == 'Structure':
         return Structure
+
     if table == 'Structure_type':
         return Structure_type
+
     if table == 'Competition':
         return Competition
 
-print("===============================")
+    if table == 'Examined':
+        return Examined
+
+    return 0
+
+#print("===============================")
 #print(Base.metadata.tables['Coach'].columns.keys())
-for key in Base.metadata.tables['Coach'].foreign_keys:
-	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
-	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
-	print key
-	print key.column
-	print key.column.table
-	for col in Base.metadata.tables['Coach'].columns:
-		print(col.name + ": " + str(col.references(key.column)))
-print("===============================")
-for fk in Base.metadata.tables['Coach'].columns['id'].foreign_keys:
-	print key
-	for line in db.session.query(map_fk(key.column.table.name)):
-		print line.data()
-	print("===============================")
+#for key in Base.metadata.tables['Coach'].foreign_keys:
+#	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
+#	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
+#	print key
+#	print key.column
+#	print key.column.table
+#	for col in Base.metadata.tables['Coach'].columns:
+#		print(col.name + ": " + str(col.references(key.column)))
+#print("===============================")
+#for fk in Base.metadata.tables['Coach'].columns['id'].foreign_keys:
+#	print key
+#	for line in db.session.query(map_fk(key.column.table.name)):
+#		print line.short_data()
+#	print("===============================")
+
+#for col in Base.metadata.tables['Coach'].columns:
+#            if col.foreign_keys:
+#                for fk in col.foreign_keys:
+#                    for line in db.session.query(map_fk(fk.column.table.name)):
+#                        print line.short_data()
+
+
 #print(Base.metadata.tables['Human'].columns)
 #print(Base.metadata.tables['Human'].columns.keys())
 #print(len(Base.metadata.tables['Human'].columns))
