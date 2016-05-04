@@ -333,40 +333,56 @@ def map_table(table):
     return 0
 
 def map_fk(table):
+    print('table name = ' + str(table))
+    data = []
     if table == 'Human':
-        return Human
+        for line in db.session.query(Human):
+            data.append(line.short_data())
 
     if table == 'Sportsman':
-		return Human
+        x = db.session.query(Sportsman, Human).join(Human)
+        for line in x:
+			data.append(line.Human.short_data())
 
     if table == 'Coach':
-        return Human
+        x = db.session.query(Coach, Human).join(Human)
+        for line in x:
+			data.append(line.Human.short_data())
 
     if table == 'Judge':
-        return Human
+        x = db.session.query(Judge, Human).join(Human)
+        for line in x:
+			data.append(line.Human.short_data())
 
     if table == 'Seminar':
-        return Seminar
+        for line in db.session.query(Seminar):
+            data.append(line.short_data())
 
     if table == 'Exam':
-        return Exam
+        for line in db.session.query(Exam):
+            data.append(line.short_data())
 
     if table == 'Seminar_type':
-        return Seminar_type
+        for line in db.session.query(Seminar_type):
+            data.append(line.short_data())
 
     if table == 'Structure':
-        return Structure
+        for line in db.session.query(Structure):
+            data.append(line.short_data())
 
     if table == 'Structure_type':
-        return Structure_type
+        for line in db.session.query(Structure_type):
+            data.append(line.short_data())
 
     if table == 'Competition':
-        return Competition
+        for line in db.session.query(Competition):
+            data.append(line.short_data())
 
     if table == 'Examined':
-        return Examined
+        for line in db.session.query(Examined):
+            data.append(line.short_data())
 
-    return 0
+    return data
 
 #print("===============================")
 #print(Base.metadata.tables['Coach'].columns.keys())
@@ -391,7 +407,9 @@ def map_fk(table):
 #                    for line in db.session.query(map_fk(fk.column.table.name)):
 #                        print line.short_data()
 
-
+x = db.session.query(Sportsman, Human).join(Human)
+for line in x:
+	print line.Human.short_data()
 #print(Base.metadata.tables['Human'].columns)
 #print(Base.metadata.tables['Human'].columns.keys())
 #print(len(Base.metadata.tables['Human'].columns))
