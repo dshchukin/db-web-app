@@ -50,8 +50,10 @@ class Competition(Base):
 		self.status = args.pop()
 		self.datestart = args.pop()
 		self.dateend = args.pop()
+    def short_data(self):
+		return [self.name, self.datestart]
     def data(self):
-    	return [self.id, self.name, self.place, self.status, self.datestart, self.dateend]
+		return [self.id, self.name, self.place, self.status, self.datestart, self.dateend]
 class Exam(Base):
     __table__ = Base.metadata.tables['Exam']
     def __init__(self, args):
@@ -59,6 +61,8 @@ class Exam(Base):
     	self.id = args.pop()
        	self.date = args.pop()
        	self.place = args.pop()
+    def short_data(self):
+    	return [self.place, self.date]
     def data(self):
     	return [self.id, self.date, self.place]
 class Examined(Base):
@@ -105,6 +109,8 @@ class Human(Base):
        	self.last_medical_exam = args.pop()
        	self.insurance_num = args.pop()
        	self.insurance_expires = args.pop()
+    def short_data(self):
+    	return [self.id, self.firstname, self.middlename, self.surname]
     def data(self):
 		return [self.id, self.firstname, self.middlename, self.surname, self.birthdate, self.TIN, self.phone, self.address, self.country, self.city, self.diploma, self.last_medical_exam, self.insurance_num, self.insurance_expires]
 class Judge(Base):
@@ -148,6 +154,8 @@ class Seminar(Base):
        	self.dateend = args.pop()
        	self.org_structure = args.pop()
        	self.org_human = args.pop()
+    def short_data(self):
+    	return [self.name, self.datestart]
     def data(self):
     	return [self.id, self.type, self.name, self.place, self.datestart, self.dateend, self.org_structure, self.org_human]
 class Seminar_participating(Base):
@@ -164,6 +172,8 @@ class Seminar_type(Base):
     	args = list(reversed(args))
     	self.type_id = args.pop()
        	self.type_name = args.pop()
+    def short_data(self):
+    	return [self.type_name]
     def data(self):
     	return [self.id, self.type_id, self.type_name]
 class Sportsman(Base):
@@ -184,6 +194,8 @@ class Structure(Base):
        	self.name = args.pop()
        	self.status = args.pop()
        	self.upper_structure = args.pop()
+    def short_data(self):
+    	return [self.name]
     def data(self):
     	return [self.id, self.type, self.name, self.status, self.upper_structure]
 class Structure_type(Base):
@@ -192,6 +204,8 @@ class Structure_type(Base):
     	args = list(reversed(args))
     	self.type_id = args.pop()
        	self.type_name = args.pop()
+    def short_data(self):
+    	return [self.type_name]
     def data(self):
     	return [self.id, self.type_id, self.type_name]
 class Transfer(Base):
@@ -318,13 +332,44 @@ def map_table(table):
     
     return 0
 
+def map_fk(table):
+    if table == 'Human':
+		return Human
+    if table == 'Coach':
+        return Human
+   	if table == 'Sportsman':
+		return Human
+    if table == 'Judge':
+        return Human
+    if table == 'Seminar':
+        return Seminar
+    if table == 'Exam':
+        return Exam
+    if table == 'Seminar_type':
+        return Seminar_type
+    if table == 'Structure':
+        return Structure
+    if table == 'Structure_type':
+        return Structure_type
+    if table == 'Competition':
+        return Competition
+
+print("===============================")
 #print(Base.metadata.tables['Coach'].columns.keys())
-#for key in Base.metadata.tables['Coach'].foreign_keys:
-#	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
-#	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
-#	print key
-#	print key.column
-#	print key.column.table
+for key in Base.metadata.tables['Coach'].foreign_keys:
+	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
+	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
+	print key
+	print key.column
+	print key.column.table
+	for col in Base.metadata.tables['Coach'].columns:
+		print(col.name + ": " + str(col.references(key.column)))
+print("===============================")
+for fk in Base.metadata.tables['Coach'].columns['id'].foreign_keys:
+	print key
+	for line in db.session.query(map_fk(key.column.table.name)):
+		print line.data()
+	print("===============================")
 #print(Base.metadata.tables['Human'].columns)
 #print(Base.metadata.tables['Human'].columns.keys())
 #print(len(Base.metadata.tables['Human'].columns))

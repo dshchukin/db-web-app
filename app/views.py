@@ -105,15 +105,8 @@ def select_query_post():
     table = request.form['table']
     flash('Select from ' + table)
     lines = []
-    print(table)
-    print(map_table(table))
-    xxx = db.session.query(map_table(table))
-    print(xxx)
     for line in db.session.query(map_table(table)):
-        print(str(line))
-        print(line.data())
         lines.append(line.data())
-    print("rendering")
     return render_template('queries/select_result.html', 
         title = 'Select query result',
         user = user,
