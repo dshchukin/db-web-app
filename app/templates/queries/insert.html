@@ -15,15 +15,20 @@
 	    {% for column, fk_data in columns %}
 	        <p><b>{{ column.name }}:</b><br>
 	        {% if fk_data != None %}
-	        	<select name="{{column}}" size="1">
-					{% for data in fk_data %}
-					    <option value={{data[0]}}>{{data}}</option>
-					{% endfor %}
-				</select>
+				{% if fk_data == [] %}
+					<input type="text" name="{{column.name}}" readonly value="None">
+					<p>Object could not be added - "{{column.name}}" field has no variants to be chosen from</p>
+				{% else %}
+					<select name="{{column.name}}" size="1">
+						{% for data in fk_data %}
+							<option value={{data[0]}}>{{data}}</option>
+						{% endfor %}
+					</select>
+				{% endif %}
 	    	{% elif 'date' == column.name or 'datestart' == column.name or 'dateend' == column.name or 'birthdate' == column.name %}
-        		<input type="text" name="{{column}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
+        		<input type="text" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
         	{% else %}
-        		<input type="text" name="{{column}}">
+        		<input type="text" name="{{column.name}}">
         	{% endif %}
 	    {% endfor %}
 	    </ul>

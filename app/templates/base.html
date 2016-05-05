@@ -5,6 +5,7 @@
     {% else %}
     <title>Database web interface</title>
     {% endif %}
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='links_wo_underline.css') }}">
   </head>
   <body>
   	<div>Database manipulation: <a href="/query">New query</a></div>

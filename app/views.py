@@ -50,12 +50,24 @@ def insert_query_post():
     if len(request.form) > 2:
         vals = []
         for column in Base.metadata.tables[table].columns:
-            x = request.form[str(column)]
+            print column.name
+            try:
+                x = request.form[column.name]
+            except KeyError:
+                return render_template('error.html',
+                    title = 'Error',
+                    user = user,
+                    error_message = "Wrong " + column.name)
             if x == '':
                 x = None
-            print('get ' + str(column) + ':' + str(x) + ';')
+            print('get ' + column.name + ':' + str(x) + ';')
             vals.append(x)
+        db.session.commit()
+        print vals
         record = create_new_record(table, vals)
+        print record
+        print record.human_id
+        print record.exam_id
         db.session.add(record)
         try:
             db.session.commit()
@@ -70,13 +82,13 @@ def insert_query_post():
         fks = []
         for col in Base.metadata.tables[table].columns:
             fk_data = None
-            print col
+            #print col
             if col.foreign_keys:
                 fk_data = []
                 for fk in col.foreign_keys:
                     fk_data = map_fk(str(fk.column.table.name))
             fks.append(fk_data)
-            print(fks)
+        print zip(Base.metadata.tables[table].columns.keys(), fks)
         return render_template('queries/insert.html', 
             title = 'Insert query',
             user = user,
@@ -98,7 +110,8 @@ def update_query():
     user = 'Denis' # user's nickname example
     return render_template('queries/update.html', 
         title = 'Update query',
-        user = user)
+        user = user,
+        tables = Base.metadata.tables.keys())
 
 @app.route('/query/select')
 def select_query():
@@ -121,5 +134,22 @@ def select_query_post():
         user = user,
         result = lines,
         columns = Base.metadata.tables[table].columns,
-        tables = [table])
+        table = table)
 
+@app.route('/single/<table>/<int:id>')
+def show_single(table, id):
+    user = 'Denis' # user's nickname example
+    columns = Base.metadata.tables[table].columns.keys()
+    tbl = map_table(table)
+    print id
+    lines = db.session.query(tbl).filter(tbl.id == id)
+    if not lines.first():
+        return render_template('error.html',
+            title = 'Error',
+            user = user,
+            error_message = "No object with such id")
+    return render_template('queries/single.html',
+        title = 'Single object',
+        user = user,
+        table = table,
+        data = zip(columns, lines.first().data()))

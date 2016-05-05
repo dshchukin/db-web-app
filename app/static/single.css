@@ -1,0 +1,19 @@
+#data{
+background:#C0C0C0;
+border:1px solid black;
+width:625px;
+float:left;
+}
+#delete{
+background:oldlace;
+border:1px solid black;
+width:625px;
+float:right;
+}
+#update{
+background:oldlace;
+border:1px solid black;
+width:625px;
+float:right;
+clear:right;
+}

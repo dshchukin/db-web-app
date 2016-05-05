@@ -1,0 +1,6 @@
+tr:hover { background: #C0C0C0; }
+td a {
+    display: block;
+    border: 1px solid black;
+    padding: 16px;
+}

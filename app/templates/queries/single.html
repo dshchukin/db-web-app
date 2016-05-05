@@ -1,9 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Hello, {{user.nickname}}!</h1>
-<h1>Select query result</h1>
-{% if columns and result %}
-	{% for name in columns, val in line %}
-	    {{ name.key }}: {{ val }}
-	{% endfor %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='single.css') }}">
+<h1>{{table}}</h1>
+<div id="data">
+	<h1>Data</h1>
+	{% if data %}
+		<table border="1">
+			<tr>
+				<th>Column</th>
+				<th>Value</th>
+			</tr>
+			{% for col, val in data %}
+				<tr>
+					<td>{{ col }}</td>
+					<td>{{ val }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	{% endif %}
+</div>
+<div id="delete">
+	<h1>Delete this object</h1>
+	<input type="submit" name="delete_button" value="Delete">
+</div>
+<div id="update">
+	<h1>Modify this object</h1>
+</div>
 {% endblock %}

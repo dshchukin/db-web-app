@@ -28,7 +28,7 @@ class Coach(Base):
 		self.category = args.pop()
 		self.datestart = args.pop()
 	def data(self):
-		return [self.id, self.category, self.datestart]
+		return[int(self.id), self.category, self.datestart]
 class Coaching(Base):
 	__table__ = Base.metadata.tables['Coaching']
 	def __init__(self, args):
@@ -39,7 +39,7 @@ class Coaching(Base):
 		self.datestart = args.pop()
 		self.dateend = args.pop()
 	def data(self):
-		return [self.id, self.sportsman, self.coach, self.datestart, self.dateend]
+		return[int(self.id), self.sportsman, self.coach, self.datestart, self.dateend]
 class Competition(Base):
 	__table__ = Base.metadata.tables['Competition']
 	def __init__(self, args):
@@ -51,9 +51,9 @@ class Competition(Base):
 		self.datestart = args.pop()
 		self.dateend = args.pop()
 	def short_data(self):
-		return [self.name, self.datestart]
+		return[int(self.id), self.name, self.datestart]
 	def data(self):
-		return [self.id, self.name, self.place, self.status, self.datestart, self.dateend]
+		return[int(self.id), self.name, self.place, self.status, self.datestart, self.dateend]
 class Exam(Base):
 	__table__ = Base.metadata.tables['Exam']
 	def __init__(self, args):
@@ -62,9 +62,9 @@ class Exam(Base):
 		self.date = args.pop()
 		self.place = args.pop()
 	def short_data(self):
-		return [self.place, self.date]
+		return[int(self.id), self.place, self.date]
 	def data(self):
-		return [self.id, self.date, self.place]
+		return[int(self.id), self.date, self.place]
 class Examined(Base):
 	__table__ = Base.metadata.tables['Examined']
 	def __init__(self, args):
@@ -73,15 +73,16 @@ class Examined(Base):
 		self.result = args.pop()
 		self.exam_id = args.pop()
 	def data(self):
-		return [self.id, self.result, self.exam_id]
+		return[int(self.id), self.result, self.exam_id]
 class Examiners(Base):
 	__table__ = Base.metadata.tables['Examiners']
 	def __init__(self, args):
 		args = list(reversed(args))
+		self.id = args.pop()
 		self.human_id = args.pop()
 		self.exam_id = args.pop()
 	def data(self):
-		return [self.id, self.human_id, self.result_id]
+		return [self.id, self.human_id, self.exam_id]
 class Gym(Base):
 	__table__ = Base.metadata.tables['Gym']
 	def __init__(self, args):
@@ -90,7 +91,7 @@ class Gym(Base):
 		self.structure = args.pop()
 		self.address = args.pop()
 	def data(self):
-		return [self.id, self.structure, self.address]
+		return[int(self.id), self.structure, self.address]
 class Human(Base):
 	__table__ = Base.metadata.tables['Human']
 	def __init__(self, args):
@@ -110,9 +111,9 @@ class Human(Base):
 		self.insurance_num = args.pop()
 		self.insurance_expires = args.pop()
 	def short_data(self):
-		return [self.id, self.firstname, self.middlename, self.surname]
+		return[int(self.id), self.firstname, self.middlename, self.surname]
 	def data(self):
-		return [self.id, self.firstname, self.middlename, self.surname, self.birthdate, self.TIN, self.phone, self.address, self.country, self.city, self.diploma, self.last_medical_exam, self.insurance_num, self.insurance_expires]
+		return[int(self.id), self.firstname, self.middlename, self.surname, self.birthdate, self.TIN, self.phone, self.address, self.country, self.city, self.diploma, self.last_medical_exam, self.insurance_num, self.insurance_expires]
 class Judge(Base):
 	__table__ = Base.metadata.tables['Judge']
 	def __init__(self, args):
@@ -121,7 +122,7 @@ class Judge(Base):
 		self.category = args.pop()
 		self.datestart = args.pop()
 	def data(self):
-		return [self.id, self.category, self.datestart]
+		return[int(self.id), self.category, self.datestart]
 class Result_judge(Base):
 	__table__ = Base.metadata.tables['Result_judge']
 	def __init__(self, args):
@@ -131,7 +132,7 @@ class Result_judge(Base):
 		self.competition = args.pop()
 		self.post = args.pop()
 	def data(self):
-		return [self.id, self.result, self.competition, self.post]
+		return[int(self.id), self.result, self.competition, self.post]
 class Result_sportsman(Base):
 	__table__ = Base.metadata.tables['Result_sportsman']
 	def __init__(self, args):
@@ -141,7 +142,7 @@ class Result_sportsman(Base):
 		self.competition = args.pop()
 		self.sportsman = args.pop()
 	def data(self):
-		return [self.id, self.result, self.competition, self.sportsman]
+		return[int(self.id), self.result, self.competition, self.sportsman]
 class Seminar(Base):
 	__table__ = Base.metadata.tables['Seminar']
 	def __init__(self, args):
@@ -155,27 +156,28 @@ class Seminar(Base):
 		self.org_structure = args.pop()
 		self.org_human = args.pop()
 	def short_data(self):
-		return [self.name, self.datestart]
+		return[int(self.id), self.name, self.datestart]
 	def data(self):
-		return [self.id, self.type, self.name, self.place, self.datestart, self.dateend, self.org_structure, self.org_human]
+		return[int(self.id), self.type, self.name, self.place, self.datestart, self.dateend, self.org_structure, self.org_human]
 class Seminar_participating(Base):
 	__table__ = Base.metadata.tables['Seminar_participating']
 	def __init__(self, args):
 		args = list(reversed(args))
+		self.id = args.pop()
 		self.human_id = args.pop()
 		self.seminar_id = args.pop()
 	def data(self):
-		return [self.id, self.human_id, self.seminar_id]
+		return[self.id, self.human_id, self.seminar_id]
 class Seminar_type(Base):
 	__table__ = Base.metadata.tables['Seminar_type']
 	def __init__(self, args):
 		args = list(reversed(args))
-		self.type_id = args.pop()
+		self.id = args.pop()
 		self.type_name = args.pop()
 	def short_data(self):
-		return [self.type_name]
+		return[int(self.id), self.type_name]
 	def data(self):
-		return [self.id, self.type_id, self.type_name]
+		return[self.id, self.type_name]
 class Sportsman(Base):
 	__table__ = Base.metadata.tables['Sportsman']
 	def __init__(self, args):
@@ -184,7 +186,7 @@ class Sportsman(Base):
 		self.category = args.pop()
 		self.datestart = args.pop()
 	def data(self):
-		return [self.id, self.category, self.datestart]
+		return[int(self.id), self.category, self.datestart]
 class Structure(Base):
 	__table__ = Base.metadata.tables['Structure']
 	def __init__(self, args):
@@ -195,19 +197,19 @@ class Structure(Base):
 		self.status = args.pop()
 		self.upper_structure = args.pop()
 	def short_data(self):
-		return [self.name]
+		return[int(self.id), self.name]
 	def data(self):
-		return [self.id, self.type, self.name, self.status, self.upper_structure]
+		return[int(self.id), self.type, self.name, self.status, self.upper_structure]
 class Structure_type(Base):
 	__table__ = Base.metadata.tables['Structure_type']
 	def __init__(self, args):
 		args = list(reversed(args))
-		self.type_id = args.pop()
+		self.id = args.pop()
 		self.type_name = args.pop()
 	def short_data(self):
 		return [self.type_name]
 	def data(self):
-		return [self.id, self.type_id, self.type_name]
+		return[self.id, self.type_name]
 class Transfer(Base):
 	__table__ = Base.metadata.tables['Transfer']
 	def __init__(self, args):
@@ -218,7 +220,7 @@ class Transfer(Base):
 		self.datestart = args.pop()
 		self.dateend = args.pop()
 	def data(self):
-		return [self.id, self.human, self.structure, self.datestart, self.dateend]
+		return[int(self.id), self.human, self.structure, self.datestart, self.dateend]
 
 def create_new_record(table, args):
 	if table == 'Coach':
