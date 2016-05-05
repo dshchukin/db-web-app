@@ -69,15 +69,12 @@ def insert_query_post():
     else:
         fks = []
         for col in Base.metadata.tables[table].columns:
-            fk_data = []
+            fk_data = None
             print col
             if col.foreign_keys:
+                fk_data = []
                 for fk in col.foreign_keys:
                     fk_data = map_fk(str(fk.column.table.name))
-                    #for line in db.session.query(map_fk(str(fk.column.table.name))):
-                    #    print line.short_data()
-                    #    fk_data.append(line.short_data())
-                    print fk_data
             fks.append(fk_data)
             print(fks)
         return render_template('queries/insert.html', 

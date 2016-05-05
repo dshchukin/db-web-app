@@ -14,7 +14,7 @@
 	    <ul>
 	    {% for column, fk_data in columns %}
 	        <p><b>{{ column.name }}:</b><br>
-	        {% if fk_data %}
+	        {% if fk_data != None %}
 	        	<select name="{{column}}" size="1">
 					{% for data in fk_data %}
 					    <option value={{data[0]}}>{{data}}</option>
