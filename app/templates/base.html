@@ -1,5 +1,18 @@
 <html>
     <head>
+
+      {% set rand_num = [1,2,3,4,5]|random() %}
+      {% if rand_num == 1 %}
+        <link rel="shortcut icon" href="{{ url_for('static', filename='icons/favicons/1.ico') }}">
+      {% elif rand_num == 2 %}
+        <link rel="shortcut icon" href="{{ url_for('static', filename='icons/favicons/2.ico') }}">
+      {% elif rand_num == 3 %}
+        <link rel="shortcut icon" href="{{ url_for('static', filename='icons/favicons/3.ico') }}">
+      {% elif rand_num == 4 %}
+        <link rel="shortcut icon" href="{{ url_for('static', filename='icons/favicons/4.ico') }}">
+      {% elif rand_num == 5 %}
+        <link rel="shortcut icon" href="{{ url_for('static', filename='icons/favicons/5.ico') }}">
+      {% endif %}
       {% if title %}
       <title>{{title}} - Database web interface</title>
       {% else %}

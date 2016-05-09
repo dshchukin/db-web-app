@@ -1,51 +1,70 @@
 {% extends "base.html" %}
 {% block content %}
-<center><h1>Adding new object...</h1>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='insert.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_cell.css') }}">
+<center>
 <form action="/query/insert" method="POST">
 		{% if tables %}
+			<h1>Adding new object...</h1>
 			<b>Choose table:</b>
 			<select name="table" size="1">
 				{% for table in tables %}
-				    <option value={{table}}>{{table}}</option>
+					<option value={{table}}>{{table}}</option>
 				{% endfor %}
 			</select>
-		{% endif %}
-		{% if columns%}
-	    <ul>
+		{% elif columns%}
+			<h1>Adding new {{table}}</h1>
 			<table>
-	    {% for column, fk_data in columns %}
-			<tr>
-	        <td><b>{{ column.name }}:</b></td>
-	        <td>
-				{% if fk_data != None %}
-				{% if fk_data == [] %}
-					<input type="text" name="{{column.name}}" readonly value="None">
-					<p>Object could not be added - "{{column.name}}" field has no variants to be chosen from</p>
-				{% else %}
-					<select name="{{column.name}}" size="1">
-						{% for data in fk_data %}
-							<option value={{data[0]}}>{{data}}</option>
-						{% endfor %}
-					</select>
-				{% endif %}
-	    	{% elif 'date' == column.name or 'datestart' == column.name or 'dateend' == column.name or 'birthdate' == column.name %}
-        		<input type="text" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
-        	{% else %}
-        		<input type="text" name="{{column.name}}">
-        	{% endif %}
-			</td>
-			</tr>
-	    {% endfor %}
-		</table>
-	    </ul>
+				{% for column, fk_data in columns %}
+					<tr>
+					<td><b>{{ column.name }}:</b></td>
+					<td>
+						{% if fk_data != None %}
+						{% if fk_data == [] %}
+							<input type="text" name="{{column.name}}" readonly value="None">
+							<p>Object could not be added - "{{column.name}}" field has no variants to be chosen from</p>
+						{% else %}
+							<select name="{{column.name}}" size="1">
+								{% for data in fk_data %}
+									<option value={{data[0]}}>{{data}}</option>
+								{% endfor %}
+							</select>
+						{% endif %}
+					{% elif 'date' == column.name or 'datestart' == column.name or 'dateend' == column.name or 'birthdate' == column.name %}
+						<input type="text" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
+					{% else %}
+						<input type="text" name="{{column.name}}">
+					{% endif %}
+					</td>
+					</tr>
+				{% endfor %}
+			</table>
 	    {% endif %}
 	    {% if columns or tables %}
        		<input type="submit" name="my-form" value="Send" align="bottom">
         {% endif %}
+
+		{% if tables %}
+			<p></p>
+			<p></p>
+			<p></p>
+			<table>
+				<tr>
+					<td> <a href={{url_for('add', table = 'Gym')}}>  <center> <div id="gym">Gym</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Human')}}> <center> <div id="human">Human</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Competition')}}> <center> <div id="competition">Competition</div> </center> </a> </td>
+				</tr>
+				<tr>
+					<td> <a href={{url_for('add', table = 'Seminar')}}> <center> <div id="seminar">Seminar</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Structure')}}> <center> <div id="structure">Structure</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Exam')}}> <center> <div id="exam">Exam</div> </center> </a> </td>
+				</tr>
+			</table>
+		{% endif %}
 </form>
 </center>
-{% if rand %}
-	<center><img src="/static/icons/karate/{{rand}}.png" alt="karate" style="width:300px;height:300px;"></center>
+{% if rand_num %}
+	<center><img src="/static/icons/karate/{{rand_num}}.png" alt="karate" style="width:300px;height:300px;"></center>
 {% else %}
 	<center><img src="/static/icons/karate/3.png" alt="karate" style="width:300px;height:300px;"></center>
 {% endif %}

@@ -1,83 +1,63 @@
-#data{
+#gym{
     border-radius: 15px;
+    padding: 1rem;
     background:#C0C0C0;
     border:1px solid black;
-    width:625px;
+    width:200px;
     float:left;
     clear:left;
 }
-#delete{
+#human{
     border-radius: 15px;
+    padding: 1rem;
     background:#C0C0C0;
     border:1px solid black;
-    width:625px;
+    width:200px;
     float:right;
     clear:right;
 }
-#update{
+#competition{
     border-radius: 15px;
+    padding: 1rem;
     background:#C0C0C0;
     border:1px solid black;
-    width:625px;
+    width:200px;
     float:right;
 }
-#update_button{
-    height: 36px;
-    width: 200px;
-}
-#delete_button{
-    height: 36px;
-    width: 200px;
-}
 
-#block_3{
+#seminar{
     border-radius: 15px;
+    padding: 1rem;
     background:#C0C0C0;
     border:1px solid black;
-    width:625px;
+    width:200px;
     float:left;
     clear:left;
 }
 
-#block_5{
+#structure{
     border-radius: 15px;
+    padding: 1rem;
     background:#C0C0C0;
     border:1px solid black;
-    width:625px;
+    width:200px;
     float:left;
     clear:left;
 }
 
-#block_6{
+#exam{
     border-radius: 15px;
+    padding: 1rem;
     background:#C0C0C0;
     border:1px solid black;
-    width:625px;
-    float:right;
-    clear:right;
-}
-
-#block_7{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
-    width:625px;
-    float:left;
-    clear:left;
-}
-
-#block_8{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
-    width:625px;
+    width:200px;
     float:right;
     clear:right;
 }
 
-tr:hover { background: #FFFFFF; }
-td a {
-    display: block;
-    border: 1px solid white;
-    padding: 16px;
-}
+#gym:hover { background: #FFFFFF; }
+#human:hover { background: #FFFFFF; }
+#competition:hover { background: #FFFFFF; }
+#seminar:hover { background: #FFFFFF; }
+#structure:hover { background: #FFFFFF; }
+#exam:hover { background: #FFFFFF; }

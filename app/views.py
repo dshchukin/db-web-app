@@ -7,6 +7,7 @@ import sqlalchemy.ext.declarative
 import sqlalchemy.orm.interfaces
 import sqlalchemy.exc
 import random
+from jinja2 import *
 
 @app.route('/')
 @app.route('/index')
@@ -96,7 +97,7 @@ def insert_query_post():
             title = 'Insert query',
             user = user,
             rand = random.randint(1,5),
-            tables = [table],
+            table = table,
             columns = zip(Base.metadata.tables[table].columns, fks))
     return render_template('queries/insert.html', 
         title = 'Insert query',
@@ -203,3 +204,12 @@ def show_single(table, id):
         user = user,
         table = table,
         data = zip(columns, lines.first().data(), fks))
+
+@app.route('/add/<table>')
+def add(table):
+    user = 'Denis' # user's nickname example
+
+    return render_template('error.html',
+        title = 'Single object',
+        user = user,
+        error_message = 'Not implemented yet')
