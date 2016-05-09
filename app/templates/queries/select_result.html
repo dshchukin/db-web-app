@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<center>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_row.css') }}">
 <h1>Select query result</h1>
 {% if columns and result %}
@@ -17,5 +18,6 @@
 	       	</tr>
 	    {% endfor %}
 	</table>
+</center>
 {% endif %}
 {% endblock %}

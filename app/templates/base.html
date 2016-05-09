@@ -1,24 +1,29 @@
 <html>
-  <head>
-    {% if title %}
-    <title>{{title}} - Database web interface</title>
-    {% else %}
-    <title>Database web interface</title>
-    {% endif %}
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='links_wo_underline.css') }}">
-  </head>
-  <body>
-  	<div>Database manipulation: <a href="/query">New query</a></div>
-    <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-    {% for message in messages %}
-        <li>{{ message }} </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-  </body>
+    <head>
+      {% if title %}
+      <title>{{title}} - Database web interface</title>
+      {% else %}
+      <title>Database web interface</title>
+      {% endif %}
+      <link rel=stylesheet type=text/css href="{{ url_for('static', filename='links_wo_underline.css') }}">
+      <link rel=stylesheet type=text/css href="{{ url_for('static', filename='base.css') }}">
+    </head>
+      <body>
+        <div>Database manipulation: <a href="/">Homepage</a></div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }} </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </body>
+  <div id="push_footer"></div>
+  <footer>
+      Course work, Denis Shuchin, 2016. Icons by <a href="http://icons8.com">icons8.com</a>
+  </footer>
 </html>

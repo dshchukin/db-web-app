@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='single.css') }}">
+<center><h1>{{table}}</h1></center>
+<div id="data">
+	<center>
+		<h1>
+			Data
+		</h1>
+		{% if data %}
+			<table cellpadding="10" width="100%" border="1">
+				<tr>
+					<th>Column</th>
+					<th>Value</th>
+				</tr>
+				{% for col, val, fk in data %}
+					<tr>
+						<td>{{ col.name }}</td>
+						<td>{{ val }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+	</center>
+	<p></p>
+</div>
+<div id="update">
+		<div id="update_name_div">
+			<h1>Modify this object</h1>
+		</div>
+		<div id="update_button_div">
+			<h1><input type="submit" id="update_button" name="update_button" value="Update"></h1>
+		</div>
+
+		<center>
+		<table cellpadding="10" width="100%" border="1">
+			<tr>
+				<th>New value</th>
+			</tr>
+			{% for column, val, fk_data in data%}
+				<tr>
+					<td>
+						{% if column.name == "id" %}
+							<input type="text" name="{{column.name}}" style="background: #D3D3D3" readonly value="{{val}}">
+						{% elif fk_data != None %}
+							{% if fk_data == [] %}
+								<input type="text" name="{{column.name}}" style="background: #D3D3D3" readonly value="None" title="No variants to be chosen from">
+							{% else %}
+								<select name="{{column.name}}" size="1">
+									{% for data in fk_data %}
+										<option value={{data[0]}}>{{data}}</option>
+									{% endfor %}
+								</select>
+							{% endif %}
+						{% elif 'date' == column.name or 'datestart' == column.name or 'dateend' == column.name or 'birthdate' == column.name %}
+							<input type="text" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
+						{% else %}
+							<input type="text" name="{{column.name}}">
+						{% endif %}
+					</td>
+
+				</tr>
+			{% endfor %}
+		</table>
+		</center>
+	<p></p>
+</div>
+<div id="delete">
+	<div id="delete_name_div">
+		<h1>Delete this object</h1>
+	</div>
+	<div id="delete_button_div">
+		<h1><input type="submit" id="delete_button" name="delete_button" value="Delete"></h1>
+	</div>
+	<p></p>
+</div>
+{% block single_content %}{% endblock %}
+{% endblock %}

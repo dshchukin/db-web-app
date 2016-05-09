@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-{% for comp in competitions %}
-<p><b>{{comp.name}}</b> at <hl>{{comp.date}}</hl> </p>
-{% endfor %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='index.css') }}">
+<center><h1>What do you want to do?</h1></center>
+<a href="/query/insert">
+    <div id="insert">
+         <center>
+             <h1>Add new data</h1>
+             <img src="/static/icons/db/add.png" alt="Add data" style="width:200px;height:200px;">
+             <p></p>
+         </center>
+    </div>
+</a>
+
+<a href="/query/select">
+    <div id="select">
+        <center>
+            <h1>Look up and modify existing data</h1>
+            <img src="/static/icons/db/db.png" alt="Select data" style="width:200px;height:200px;">
+            <p></p>
+        </center>
+    </div>
+</a>
+
 {% endblock %}

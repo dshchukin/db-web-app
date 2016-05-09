@@ -388,10 +388,10 @@ def map_fk(table):
 
 #print("===============================")
 #print(Base.metadata.tables['Coach'].columns.keys())
-#for key in Base.metadata.tables['Coach'].foreign_keys:
+for key in Base.metadata.tables['Coach'].foreign_keys:
 #	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
 #	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
-#	print key
+	print key
 #	print key.column
 #	print key.column.table
 #	for col in Base.metadata.tables['Coach'].columns:

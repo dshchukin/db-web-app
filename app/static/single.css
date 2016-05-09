@@ -5,15 +5,35 @@ width:625px;
 float:left;
 }
 #delete{
-background:oldlace;
-border:1px solid black;
-width:625px;
-float:right;
-}
-#update{
-background:oldlace;
+background:#C0C0C0;
 border:1px solid black;
 width:625px;
 float:right;
 clear:right;
+}
+#update{
+background:#C0C0C0;
+border:1px solid black;
+width:625px;
+float:right;
+}
+#update_name_div{
+    float:left;
+}
+#update_button_div{
+    float:right;
+}
+#update_button{
+    height: 36px;
+    width: 200px;
+}
+#delete_name_div{
+    float:left;
+}
+#delete_button_div{
+    float:right;
+}
+#delete_button{
+    height: 36px;
+    width: 200px;
 }

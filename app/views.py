@@ -139,7 +139,7 @@ def select_query_post():
 @app.route('/single/<table>/<int:id>')
 def show_single(table, id):
     user = 'Denis' # user's nickname example
-    columns = Base.metadata.tables[table].columns.keys()
+    columns = Base.metadata.tables[table].columns
     tbl = map_table(table)
     print id
     lines = db.session.query(tbl).filter(tbl.id == id)
@@ -148,8 +148,25 @@ def show_single(table, id):
             title = 'Error',
             user = user,
             error_message = "No object with such id")
-    return render_template('queries/single.html',
+    fks = []
+    for col in Base.metadata.tables[table].columns:
+        fk_data = None
+        # print col
+        if col.foreign_keys:
+            fk_data = []
+            for fk in col.foreign_keys:
+                fk_data = map_fk(str(fk.column.table.name))
+        fks.append(fk_data)
+    print(fks)
+    print(lines.first().data())
+    if table == "Human":
+        return render_template('queries/single/single_human.html',
+                               title='Single object',
+                               user=user,
+                               table=table,
+                               data=zip(columns, lines.first().data(), fks))
+    return render_template('queries/single/single_base.html',
         title = 'Single object',
         user = user,
         table = table,
-        data = zip(columns, lines.first().data()))
+        data = zip(columns, lines.first().data(), fks))

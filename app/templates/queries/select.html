@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+<center>
 <h1>Select query</h1>
 <form action="/query/select" method="POST">
 		{% if tables %}
-			<p><b>Choose table:</b><br>
+			<p><b>Choose table:</b>
 			<select name="table" size="1">
 				{% for table in tables %}
 				    <option value={{table}}>{{table}}</option>
@@ -11,7 +12,8 @@
 			</select>
 		{% endif %}
         {% if columns or tables %}
-       		<input type="submit" name="my-form" value="Send">
+       		<input type="submit" id="select-button" name="my-form" value="Send">
         {% endif %}
 </form>
+</center>
 {% endblock %}
