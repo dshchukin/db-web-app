@@ -1,26 +1,27 @@
 #data{
-background:#C0C0C0;
-border:1px solid black;
-width:625px;
-float:left;
+    background:#C0C0C0;
+    border:1px solid black;
+    width:625px;
+    float:left;
 }
 #delete{
-background:#C0C0C0;
-border:1px solid black;
-width:625px;
-float:right;
-clear:right;
+    background:#C0C0C0;
+    border:1px solid black;
+    width:625px;
+    float:right;
+    clear:right;
 }
 #update{
-background:#C0C0C0;
-border:1px solid black;
-width:625px;
-float:right;
+    background:#C0C0C0;
+    border:1px solid black;
+    width:625px;
+    float:right;
 }
 #update_name_div{
     float:left;
 }
 #update_button_div{
+    float:top;
     float:right;
 }
 #update_button{

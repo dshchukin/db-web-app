@@ -22,6 +22,6 @@ footer {
 
 #push_footer{
     float:right;
-    clear:right;
+    clear:both;
     height:100px;
 }
