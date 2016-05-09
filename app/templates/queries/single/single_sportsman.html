@@ -1,0 +1,83 @@
+{% extends "/queries/single/single_base.html" %}
+{% block single_content %}
+{% if coaches %}
+    <div id="block_3">
+            <center><h1>
+                <details>
+                    <summary>
+                        Coaches
+                    </summary>
+                        <table cellpadding="10" width="100%" border="1">
+                            <tr>
+                                <th>Coach</th>
+                                <th>From</th>
+                                <th>Until</th>
+                            </tr>
+                            {% for line in coaches %}
+                                <tr>
+                                    <td height="50">{{ line[1].short_data()}}</td>
+                                    <td height="50">{{ line[0].datestart }}</td>
+                                    <td height="50">{{ line[0].dateend }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+{% endif %}
+{% if competitions %}
+    <div id="block_5">
+            <center><h1>
+                <details>
+                    <summary>
+                        Competitions
+                    </summary>
+                        <table cellpadding="10" width="100%" border="1">
+                            <tr>
+                                <th>Competition</th>
+                                <th>Result</th>
+                                <th>Datestart</th>
+                                <th>Dateend</th>
+                            </tr>
+                            {% for line in competitions %}
+                                <tr>
+                                    <td height="50">{{ line[1].name}}</td>
+                                    <td height="50">{{ line[0].result }}</td>
+                                    <td height="50">{{ line[1].datestart }}</td>
+                                    <td height="50">{{ line[1].dateend }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+{% endif %}
+{% if structures %}
+    <div id="block_6">
+            <center><h1>
+                <details>
+                    <summary>
+                        Structures
+                    </summary>
+                        <table cellpadding="10" width="100%" border="1">
+                            <tr>
+                                <th>Structure</th>
+                                <th>From</th>
+                                <th>Until</th>
+                            </tr>
+                            {% for line in structures %}
+                                <tr>
+                                    <td height="50">{{ line[1].name}}</td>
+                                    <td height="50">{{ line[0].datestart }}</td>
+                                    <td height="50">{{ line[0].dateend }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+{% endif %}
+{% endblock %}

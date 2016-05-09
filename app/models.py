@@ -6,6 +6,7 @@ from sqlalchemy_utils import *
 
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
+from sqlalchemy.orm import relationship, backref
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
@@ -16,9 +17,9 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 engine = create_engine('sqlite:///app_data.db', echo = True)
 #meta = MetaData(bind=engine)
 Base = declarative_base()
+
 Base.metadata.reflect(engine)
 
-from sqlalchemy.orm import relationship, backref
 
 class Coach(Base):
 	__table__ = Base.metadata.tables['Coach']
@@ -388,10 +389,10 @@ def map_fk(table):
 
 #print("===============================")
 #print(Base.metadata.tables['Coach'].columns.keys())
-for key in Base.metadata.tables['Coach'].foreign_keys:
+#for key in Base.metadata.tables['Coach'].foreign_keys:
 #	print (Base.metadata.tables['Coach'].columns['id'].references(key.column))
 #	print (Base.metadata.tables['Coach'].columns['id'].primary_key)
-	print key
+#	print key
 #	print key.column
 #	print key.column.table
 #	for col in Base.metadata.tables['Coach'].columns:

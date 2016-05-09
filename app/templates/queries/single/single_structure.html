@@ -1,0 +1,51 @@
+{% extends "/queries/single/single_base.html" %}
+{% block single_content %}
+{% if participants %}
+    <div id="block_3">
+            <center><h1>
+                <details>
+                    <summary>
+                        Participants
+                    </summary>
+                        <table cellpadding="10" width="100%" border="1">
+                            <tr>
+                                <th>Structure</th>
+                                <th>From</th>
+                            </tr>
+                            {% for line in participants %}
+                                <tr>
+                                    <td height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].short_data()}}</a></td>
+                                    <td height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].datestart }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+{% endif %}
+{% if gyms %}
+    <div id="block_5">
+            <center><h1>
+                <details>
+                    <summary>
+                        Gyms
+                    </summary>
+                        <table cellpadding="10" width="100%" border="1">
+                            <tr>
+                                <th>Structure</th>
+                                <th>From</th>
+                                <th>Until</th>
+                            </tr>
+                            {% for line in structures %}
+                                <tr>
+                                    <td height="50"><a href={{url_for('show_single', table = 'Gym', id = line[1].id)}}> {{ line[1].name}}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+{% endif %}
+{% endblock %}

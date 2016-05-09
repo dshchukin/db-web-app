@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<center><h1>Insert query</h1>
+<center><h1>Adding new object...</h1>
 <form action="/query/insert" method="POST">
 		{% if tables %}
 			<b>Choose table:</b>
@@ -44,4 +44,9 @@
         {% endif %}
 </form>
 </center>
+{% if rand %}
+	<center><img src="/static/icons/karate/{{rand}}.png" alt="karate" style="width:300px;height:300px;"></center>
+{% else %}
+	<center><img src="/static/icons/karate/3.png" alt="karate" style="width:300px;height:300px;"></center>
+{% endif %}
 {% endblock %}

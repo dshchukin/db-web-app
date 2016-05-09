@@ -6,6 +6,7 @@ import sqlalchemy
 import sqlalchemy.ext.declarative
 import sqlalchemy.orm.interfaces
 import sqlalchemy.exc
+import random
 
 @app.route('/')
 @app.route('/index')
@@ -24,6 +25,7 @@ def index():
     return render_template("index.html",
         title = 'Home',
         user = user,
+        rand=random.randint(1, 5),
         competitions = competitions)
 
 @app.route('/query', methods = ['GET', 'POST'])
@@ -31,6 +33,7 @@ def new_query():
     user = 'Denis' # user's nickname example
     return render_template('query.html', 
         title = 'New query',
+        rand=random.randint(1, 5),
         user = user)
 
 @app.route('/query/insert')
@@ -38,6 +41,7 @@ def insert_query():
     user = 'Denis' # user's nickname example
     return render_template('queries/insert.html', 
         title = 'Insert query',
+        rand = random.randint(1,5),
         user = user,
         tables = Base.metadata.tables.keys())
 
@@ -46,7 +50,6 @@ def insert_query_post():
     user = 'Denis' # user's nickname example
     table = request.form['table']
     num_of_cols = len(Base.metadata.tables[table].columns)
-    print(len(request.form))
     if len(request.form) > 2:
         vals = []
         for column in Base.metadata.tables[table].columns:
@@ -76,6 +79,7 @@ def insert_query_post():
             print(reason)
             return render_template('error.html',
                 title = 'Error',
+                rand = random.randint(1,5),
                 user = user,
                 error_message = str(reason))
     else:
@@ -88,10 +92,10 @@ def insert_query_post():
                 for fk in col.foreign_keys:
                     fk_data = map_fk(str(fk.column.table.name))
             fks.append(fk_data)
-        print zip(Base.metadata.tables[table].columns.keys(), fks)
         return render_template('queries/insert.html', 
             title = 'Insert query',
             user = user,
+            rand = random.randint(1,5),
             tables = [table],
             columns = zip(Base.metadata.tables[table].columns, fks))
     return render_template('queries/insert.html', 
@@ -119,6 +123,7 @@ def select_query():
     return render_template('queries/select.html', 
         title = 'Select query',
         user = user,
+        rand = random.randint(1,5),
         tables = Base.metadata.tables.keys())
 
 @app.route('/query/select', methods = ['POST'])
@@ -141,7 +146,6 @@ def show_single(table, id):
     user = 'Denis' # user's nickname example
     columns = Base.metadata.tables[table].columns
     tbl = map_table(table)
-    print id
     lines = db.session.query(tbl).filter(tbl.id == id)
     if not lines.first():
         return render_template('error.html',
@@ -159,12 +163,41 @@ def show_single(table, id):
         fks.append(fk_data)
     print(fks)
     print(lines.first().data())
+    page = "base"
+    coaches = []
+    competitions = []
+    gyms = []
+    participants = []
+    structures = []
     if table == "Human":
-        return render_template('queries/single/single_human.html',
-                               title='Single object',
-                               user=user,
-                               table=table,
-                               data=zip(columns, lines.first().data(), fks))
+        page = "human"
+    if table == "Structure":
+        page = "structure"
+        gyms = db.session.query(Gym).filter(id == Gym.structure)
+        participants = db.session.query(Transfer, Human).filter(id == Transfer.human and not Transfer.dateend).filter(Transfer.human == Human.id)
+    if table == "Competition":
+        page = "competition"
+    if table == "Exam":
+        page = "exam"
+    if table == "Sportsman":
+        page = "sportsman"
+        coaches = db.session.query(Coaching, Human).filter(id == Coaching.sportsman).filter(Coaching.coach == Human.id)
+        competitions = db.session.query(Result_sportsman, Competition).filter(id == Result_sportsman.sportsman).filter(Result_sportsman.competition == Competition.id)
+        structures = db.session.query(Transfer, Structure).filter(id == Transfer.human).filter(Transfer.structure == Structure.id)
+    if table == "Coach":
+        page = "coach"
+    if table == "Seminar":
+        page = "seminar"
+    return render_template('queries/single/single_' + page +'.html',
+                              title='Single object',
+                              user=user,
+                              participants = participants,
+                              gyms = gyms,
+                              table=table,
+                              coaches = coaches,
+                              competitions = competitions,
+                              structures = structures,
+                              data=zip(columns, lines.first().data(), fks))
     return render_template('queries/single/single_base.html',
         title = 'Single object',
         user = user,

@@ -1,10 +1,13 @@
 #data{
+    border-radius: 15px;
     background:#C0C0C0;
     border:1px solid black;
     width:625px;
     float:left;
+    clear:left;
 }
 #delete{
+    border-radius: 15px;
     background:#C0C0C0;
     border:1px solid black;
     width:625px;
@@ -12,29 +15,69 @@
     clear:right;
 }
 #update{
+    border-radius: 15px;
     background:#C0C0C0;
     border:1px solid black;
     width:625px;
-    float:right;
-}
-#update_name_div{
-    float:left;
-}
-#update_button_div{
-    float:top;
     float:right;
 }
 #update_button{
     height: 36px;
     width: 200px;
 }
-#delete_name_div{
-    float:left;
-}
-#delete_button_div{
-    float:right;
-}
 #delete_button{
     height: 36px;
     width: 200px;
+}
+
+#block_3{
+    border-radius: 15px;
+    background:#C0C0C0;
+    border:1px solid black;
+    width:625px;
+    float:left;
+    clear:left;
+}
+
+#block_5{
+    border-radius: 15px;
+    background:#C0C0C0;
+    border:1px solid black;
+    width:625px;
+    float:left;
+    clear:left;
+}
+
+#block_6{
+    border-radius: 15px;
+    background:#C0C0C0;
+    border:1px solid black;
+    width:625px;
+    float:right;
+    clear:right;
+}
+
+#block_7{
+    border-radius: 15px;
+    background:#C0C0C0;
+    border:1px solid black;
+    width:625px;
+    float:left;
+    clear:left;
+}
+
+#block_8{
+    border-radius: 15px;
+    background:#C0C0C0;
+    border:1px solid black;
+    width:625px;
+    float:right;
+    clear:right;
+}
+
+tr:hover { background: #C0C0C0; }
+td a {
+    display: block;
+    border: 1px solid white;
+    padding: 16px;
 }
