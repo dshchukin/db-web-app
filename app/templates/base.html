@@ -28,7 +28,8 @@
         {% if messages %}
         <ul>
         {% for message in messages %}
-            <li>{{ message }} </li>
+	        <img src="/static/icons/db/protect_error.png" alt="protect_error" style="width:25px;height:25px;">
+            {{ message }}
         {% endfor %}
         </ul>
         {% endif %}

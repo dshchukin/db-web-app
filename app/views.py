@@ -207,6 +207,8 @@ def add(table):
             fk_data = []
             for fk in col.foreign_keys:
                 fk_data = map_fk(str(fk.column.table.name))
+            if col.name == 'org_structure' or col.name == 'org_human':
+                fk_data.append(None)
         fks.append(fk_data)
     return render_template('queries/add.html',
                            title='Insert query',
@@ -236,6 +238,13 @@ def add_post(table):
     print vals
     record = create_new_record(table, vals)
     db.session.add(record)
+    if table == 'Seminar':
+        if record.org_human != None and record.org_structure != None:
+            flash('Only one of field \'org_structure\' and \'org_human\' should be defined')
+            return add(table)
+        if record.org_human == None and record.org_structure == None:
+            flash('One of field \'org_structure\' and \'org_human\' should be defined')
+            return add(table)
     try:
         db.session.commit()
     except sqlalchemy.exc.SQLAlchemyError, exc:
