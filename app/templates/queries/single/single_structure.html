@@ -1,24 +1,39 @@
 {% extends "/queries/single/single_base.html" %}
 {% block single_content %}
+
+<form action="/single/{{table}}/{{id}}" method="POST">
 {% if participants %}
+
     <div id="block_3">
             <center><h1>
                 <details>
                     <summary>
                         Participants
                     </summary>
-                        <table cellpadding="10" width="100%" border="1">
+                    <table cellpadding="10" width="100%" border="1">
+                        <tr>
+                            <th>Structure</th>
+                            <th>From</th>
+                            <th>Kick</th>
+                        </tr>
+                        {% for line in participants %}
                             <tr>
-                                <th>Structure</th>
-                                <th>From</th>
+                                <td height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].short_data()}}</a></td>
+                                <td height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].datestart }}</a></td>
+                                <td><input type="submit" name="kick" value="Kick {{line[1].id}}" align="bottom"></td>
                             </tr>
-                            {% for line in participants %}
-                                <tr>
-                                    <td height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].short_data()}}</a></td>
-                                    <td height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].datestart }}</a></td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                        {% endfor %}
+                    </table>
+                    <h5>Add participant</h5>
+                    <select name="table" size="1">
+                        {% for line in available_participants %}
+                            <option value={{line.id}}>{{line.short_data()}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="datestart" placeholder="datestart" required>
+                    <input type="submit" name="add" value="Add" align="bottom">
+
+
                 </details>
             </h1></center>
         <p></p>
@@ -48,4 +63,6 @@
         <p></p>
     </div>
 {% endif %}
+
+</form>
 {% endblock %}

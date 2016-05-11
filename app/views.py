@@ -7,6 +7,7 @@ import sqlalchemy.ext.declarative
 import sqlalchemy.orm.interfaces
 import sqlalchemy.exc
 import random
+import datetime
 from jinja2 import *
 
 @app.route('/')
@@ -112,7 +113,7 @@ def select_query():
 @app.route('/query/select/<table>')
 def select(table):
     user = 'Denis' # user's nickname example
-    flash('Select from ' + table)
+    flash('Select from ' + table, 'note')
     lines = []
     for line in db.session.query(map_table(table)):
         lines.append(line.data())
@@ -127,7 +128,7 @@ def select(table):
 def select_query_post():
     user = 'Denis' # user's nickname example
     table = request.form['table']
-    flash('Select from ' + table)
+    flash('Select from ' + table, 'note')
     lines = []
     for line in db.session.query(map_table(table)):
         lines.append(line.data())
@@ -164,12 +165,66 @@ def show_single(table, id):
     coaches = []
     competitions = []
     gyms = []
+    available_participants = []
     participants = []
     structures = []
     if table == "Human":
         page = "human"
     if table == "Structure":
         page = "structure"
+        gyms = db.session.query(Gym).filter(id == Gym.structure)
+        not_available_participants = db.session.query(Transfer, Human).filter(Transfer.dateend == None).filter(Transfer.human == Human.id)
+        nap = []
+        for x in not_available_participants:
+            nap.append(x[1].id)
+        print nap
+        ap = db.session.query(Human).filter(Human.id.notin_(nap))
+        available_participants = ap
+        participants = db.session.query(Transfer, Human).filter(id == Transfer.structure, Transfer.dateend == None).filter(Transfer.human == Human.id)
+    if table == "Competition":
+        page = "competition"
+    if table == "Exam":
+        page = "exam"
+    if table == "Sportsman":
+        page = "sportsman"
+        coaches = db.session.query(Coaching, Human).filter(id == Coaching.sportsman).filter(Coaching.coach == Human.id)
+        competitions = db.session.query(Result_sportsman, Competition).filter(id == Result_sportsman.sportsman).filter(Result_sportsman.competition == Competition.id)
+        structures = db.session.query(Transfer, Structure).filter(id == Transfer.human).filter(Transfer.structure == Structure.id)
+    if table == "Coach":
+        page = "coach"
+    if table == "Seminar":
+        page = "seminar"
+    date = datetime.datetime.now()
+    today = date.strftime("%d-%m-%Y")
+    return render_template('queries/single/single_' + page +'.html',
+                              id = id,
+                              today = today,
+                              title='Single object',
+                              user=user,
+                              participants = participants,
+                              available_participants = available_participants,
+                              gyms = gyms,
+                              table=table,
+                              coaches = coaches,
+                              competitions = competitions,
+                              structures = structures,
+                              data=zip(columns, lines.first().data(), fks))
+
+@app.route('/single/<table>/<int:id>', methods = ['POST'])
+def show_single_post(table, id):
+    print 'post'
+    user = 'Denis' # user's nickname example
+    columns = Base.metadata.tables[table].columns
+    tbl = map_table(table)
+    lines = db.session.query(tbl).filter(tbl.id == id)
+    if table == "Human":
+        page = "human"
+    if table == "Structure":
+        page = "structure"
+        kick_id_str = request.form['kick']
+        kick_id = int(kick_id_str[5:])
+        structure = db.session.query(Structure).get(kick_id)
+        print 'kick ' + str(kick_id)
         gyms = db.session.query(Gym).filter(id == Gym.structure)
         participants = db.session.query(Transfer, Human).filter(id == Transfer.human and not Transfer.dateend).filter(Transfer.human == Human.id)
     if table == "Competition":
@@ -185,16 +240,9 @@ def show_single(table, id):
         page = "coach"
     if table == "Seminar":
         page = "seminar"
-    return render_template('queries/single/single_' + page +'.html',
-                              title='Single object',
-                              user=user,
-                              participants = participants,
-                              gyms = gyms,
-                              table=table,
-                              coaches = coaches,
-                              competitions = competitions,
-                              structures = structures,
-                              data=zip(columns, lines.first().data(), fks))
+    date = datetime.datetime.now()
+    today = date.strftime("%d-%m-%Y")
+    return show_single(table, id)
 
 
 @app.route('/add/<table>')
@@ -240,10 +288,10 @@ def add_post(table):
     db.session.add(record)
     if table == 'Seminar':
         if record.org_human != None and record.org_structure != None:
-            flash('Only one of field \'org_structure\' and \'org_human\' should be defined')
+            flash('Only one of field \'org_structure\' and \'org_human\' should be defined', 'error')
             return add(table)
         if record.org_human == None and record.org_structure == None:
-            flash('One of field \'org_structure\' and \'org_human\' should be defined')
+            flash('One of field \'org_structure\' and \'org_human\' should be defined', 'error')
             return add(table)
     try:
         db.session.commit()

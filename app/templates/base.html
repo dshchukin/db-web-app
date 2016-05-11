@@ -24,11 +24,15 @@
       <body>
         <div>Database manipulation: <a href="/">Homepage</a></div>
         <hr>
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories = true) %}
         {% if messages %}
         <ul>
-        {% for message in messages %}
+        {% for category, message in messages %}
+          {% if category == 'error' %}
 	        <img src="/static/icons/db/protect_error.png" alt="protect_error" style="width:25px;height:25px;">
+          {% else %}
+            <img src="/static/icons/db/db.png" alt="note" style="width:25px;height:25px;">
+          {% endif %}
             {{ message }}
         {% endfor %}
         </ul>
