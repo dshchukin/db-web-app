@@ -51,6 +51,7 @@ def insert_query_post():
     user = 'Denis' # user's nickname example
     table = request.form['table']
     num_of_cols = len(Base.metadata.tables[table].columns)
+    print "here"
     if len(request.form) > 2:
         vals = []
         for column in Base.metadata.tables[table].columns:
@@ -69,9 +70,7 @@ def insert_query_post():
         db.session.commit()
         print vals
         record = create_new_record(table, vals)
-        print record
-        print record.human_id
-        print record.exam_id
+        print vals
         db.session.add(record)
         try:
             db.session.commit()
@@ -83,11 +82,11 @@ def insert_query_post():
                 rand = random.randint(1,5),
                 user = user,
                 error_message = str(reason))
+        return show_single(table, vals[0])
     else:
         fks = []
         for col in Base.metadata.tables[table].columns:
             fk_data = None
-            #print col
             if col.foreign_keys:
                 fk_data = []
                 for fk in col.foreign_keys:
@@ -99,24 +98,7 @@ def insert_query_post():
             rand = random.randint(1,5),
             table = table,
             columns = zip(Base.metadata.tables[table].columns, fks))
-    return render_template('queries/insert.html', 
-        title = 'Insert query',
-        user = user)
 
-@app.route('/query/delete', methods = ['GET', 'POST'])
-def delete_query():
-    user = 'Denis' # user's nickname example
-    return render_template('queries/delete.html', 
-        title = 'Delete query',
-        user = user)
-
-@app.route('/query/update', methods = ['GET', 'POST'])
-def update_query():
-    user = 'Denis' # user's nickname example
-    return render_template('queries/update.html', 
-        title = 'Update query',
-        user = user,
-        tables = Base.metadata.tables.keys())
 
 @app.route('/query/select')
 def select_query():
@@ -127,6 +109,20 @@ def select_query():
         rand = random.randint(1,5),
         tables = Base.metadata.tables.keys())
 
+@app.route('/query/select/<table>')
+def select(table):
+    user = 'Denis' # user's nickname example
+    flash('Select from ' + table)
+    lines = []
+    for line in db.session.query(map_table(table)):
+        lines.append(line.data())
+    return render_template('queries/select_result.html',
+        title = 'Select query result',
+        user = user,
+        result = lines,
+        columns = Base.metadata.tables[table].columns,
+        table = table)
+
 @app.route('/query/select', methods = ['POST'])
 def select_query_post():
     user = 'Denis' # user's nickname example
@@ -135,7 +131,7 @@ def select_query_post():
     lines = []
     for line in db.session.query(map_table(table)):
         lines.append(line.data())
-    return render_template('queries/select_result.html', 
+    return render_template('queries/select_result.html',
         title = 'Select query result',
         user = user,
         result = lines,
@@ -199,17 +195,55 @@ def show_single(table, id):
                               competitions = competitions,
                               structures = structures,
                               data=zip(columns, lines.first().data(), fks))
-    return render_template('queries/single/single_base.html',
-        title = 'Single object',
-        user = user,
-        table = table,
-        data = zip(columns, lines.first().data(), fks))
+
 
 @app.route('/add/<table>')
 def add(table):
-    user = 'Denis' # user's nickname example
+    fks = []
+    for col in Base.metadata.tables[table].columns:
+        fk_data = None
+        # print col
+        if col.foreign_keys:
+            fk_data = []
+            for fk in col.foreign_keys:
+                fk_data = map_fk(str(fk.column.table.name))
+        fks.append(fk_data)
+    return render_template('queries/add.html',
+                           title='Insert query',
+                           table=table,
+                           columns=zip(Base.metadata.tables[table].columns, fks))
 
-    return render_template('error.html',
-        title = 'Single object',
-        user = user,
-        error_message = 'Not implemented yet')
+
+
+@app.route('/add/<table>', methods = ['POST'])
+def add_post(table):
+    user = 'Denis' # user's nickname example
+    num_of_cols = len(Base.metadata.tables[table].columns)
+    vals = []
+    for column in Base.metadata.tables[table].columns:
+        print column.name
+        try:
+            x = request.form[column.name]
+        except KeyError:
+            return render_template('error.html',
+                title = 'Error',
+                user = user,
+                error_message = "Wrong " + column.name)
+        if x == '':
+            x = None
+        print('get ' + column.name + ':' + str(x) + ';')
+        vals.append(x)
+    print vals
+    record = create_new_record(table, vals)
+    db.session.add(record)
+    try:
+        db.session.commit()
+    except sqlalchemy.exc.SQLAlchemyError, exc:
+        reason = exc.message
+        print(reason)
+        return render_template('error.html',
+            title = 'Error',
+            rand = random.randint(1,5),
+            user = user,
+            error_message = str(reason))
+    return redirect("single/" + table + '/' + str(record.id))

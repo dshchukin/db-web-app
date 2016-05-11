@@ -73,6 +73,8 @@ class Examined(Base):
 		self.id = args.pop()
 		self.result = args.pop()
 		self.exam_id = args.pop()
+	def short_data(self):
+		return[int(self.id), self.result, db.session.query(Exam).filter(Exam.id == self.exam_id).first().place, db.session.query(Exam).filter(Exam.id == self.exam_id).first().date]
 	def data(self):
 		return[int(self.id), self.result, self.exam_id]
 class Examiners(Base):

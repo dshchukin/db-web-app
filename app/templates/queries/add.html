@@ -3,7 +3,7 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='insert.css') }}">
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_cell.css') }}">
 <center>
-<form action="/query/insert" method="POST">
+<form action="/add/{{table}}" method="POST">
 		{% if tables %}
 			<h1>Adding new object...</h1>
 			<b>Choose table:</b>

@@ -2,7 +2,7 @@
 {% block content %}
 <center>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_row.css') }}">
-<h1>Select query result</h1>
+<h1>Data from {{table}}</h1>
 {% if columns and result %}
 	<table border="1">
 		<tr>

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='insert.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_cell.css') }}">
 <center>
 <h1>Getting information...</h1>
 <form action="/query/select" method="POST">
@@ -14,6 +16,23 @@
         {% if columns or tables %}
        		<input type="submit" id="select-button" name="my-form" value="Send">
         {% endif %}
+				{% if tables %}
+			<p></p>
+			<p></p>
+			<p></p>
+			<table>
+				<tr>
+					<td> <a href={{url_for('select', table = 'Gym')}}>  <center> <div id="gym">Gym</div> </center> </a> </td>
+					<td> <a href={{url_for('select', table = 'Human')}}> <center> <div id="human">Human</div> </center> </a> </td>
+					<td> <a href={{url_for('select', table = 'Competition')}}> <center> <div id="competition">Competition</div> </center> </a> </td>
+				</tr>
+				<tr>
+					<td> <a href={{url_for('select', table = 'Seminar')}}> <center> <div id="seminar">Seminar</div> </center> </a> </td>
+					<td> <a href={{url_for('select', table = 'Structure')}}> <center> <div id="structure">Structure</div> </center> </a> </td>
+					<td> <a href={{url_for('select', table = 'Exam')}}> <center> <div id="exam">Exam</div> </center> </a> </td>
+				</tr>
+			</table>
+		{% endif %}
 </form>
 </center>
 {% if rand %}

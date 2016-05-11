@@ -1,4 +1,4 @@
-#data{
+#block_1{
     border-radius: 15px;
     background:#C0C0C0;
     border:1px solid black;
@@ -8,30 +8,26 @@
     float:left;
     clear:left;
 }
-#delete{
+#block_2{
     border-radius: 15px;
     background:#C0C0C0;
     border:1px solid black;
-    overflow: hidden;
     width:500px;
     max-width:500px;
+    overflow: hidden;
     float:right;
     clear:right;
 }
-#update{
+#block_4{
     border-radius: 15px;
     background:#C0C0C0;
     border:1px solid black;
-    overflow: hidden;
     width:500px;
     max-width:500px;
+    overflow: hidden;
     float:right;
 }
-#update_button{
-    height: 36px;
-    width: 200px;
-}
-#delete_button{
+#add_button{
     height: 36px;
     width: 200px;
 }
@@ -40,9 +36,9 @@
     border-radius: 15px;
     background:#C0C0C0;
     border:1px solid black;
-    overflow: hidden;
     width:500px;
     max-width:500px;
+    overflow: hidden;
     float:left;
     clear:left;
 }
@@ -51,9 +47,9 @@
     border-radius: 15px;
     background:#C0C0C0;
     border:1px solid black;
-    overflow: hidden;
     width:500px;
     max-width:500px;
+    overflow: hidden;
     float:left;
     clear:left;
 }
