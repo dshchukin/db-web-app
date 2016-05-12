@@ -213,6 +213,8 @@ def show_single(table, id):
 @app.route('/single/<table>/<int:id>', methods = ['POST'])
 def show_single_post(table, id):
     print 'post'
+    date = datetime.datetime.now()
+    today = date.strftime("%d-%m-%Y")
     user = 'Denis' # user's nickname example
     columns = Base.metadata.tables[table].columns
     tbl = map_table(table)
@@ -225,7 +227,23 @@ def show_single_post(table, id):
             print 'kicking...'
             kick_id_str = request.form['kick']
             kick_id = int(kick_id_str[5:])
-            structure = db.session.query(Structure).get(kick_id)
+            x = db.session.query(Transfer).filter(Transfer.dateend == None)
+            print x.count()
+            transfer = db.session.query(Transfer).filter(Transfer.human == kick_id).filter(Transfer.dateend == None)
+            print transfer.count()
+            transfer = transfer.first()
+            transfer.dateend = today
+            db.session.add(transfer)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
             print 'kick ' + str(kick_id)
         except KeyError:
             print 'no one was kicked'
@@ -286,8 +304,6 @@ def show_single_post(table, id):
         page = "coach"
     if table == "Seminar":
         page = "seminar"
-    date = datetime.datetime.now()
-    today = date.strftime("%d-%m-%Y")
     return show_single(table, id)
 
 
