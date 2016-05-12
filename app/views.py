@@ -172,7 +172,7 @@ def show_single(table, id):
         page = "human"
     if table == "Structure":
         page = "structure"
-        gyms = db.session.query(Gym).filter(id == Gym.structure)
+        gyms = db.session.query(Gym).filter(Gym.structure == id)
         not_available_participants = db.session.query(Transfer, Human).filter(Transfer.dateend == None).filter(Transfer.human == Human.id)
         nap = []
         for x in not_available_participants:
@@ -220,14 +220,55 @@ def show_single_post(table, id):
     tbl = map_table(table)
     lines = db.session.query(tbl).filter(tbl.id == id)
     deleted = False
+    updated = False
+    try:
+        print 'check update button'
+        updated = request.form['update']
+        updated = True
+        vals = []
+        print 'update button was pressed'
+        try:
+            #print 'update id=' + str(id)  + ' from ' + table
+            for column in columns:
+                try:
+                    x = request.form[column.name]
+                except KeyError:
+                    return render_template('error.html',
+                                           title='Error',
+                                           user=user,
+                                           error_message="Wrong " + column.name)
+                if x == '':
+                    x = None
+                if column.name == 'id':
+                    vals.append(id)
+                else:
+                    vals.append(x)
+                record = db.session.query(map_table(table)).filter(map_table(table).id == id).update({column.name: x})
+            db.session.commit()
+        except sqlalchemy.exc.SQLAlchemyError, exc:
+            reason = exc.message
+            print(reason)
+            return render_template('error.html',
+                                   title='Error',
+                                   rand=random.randint(1, 5),
+                                   user=user,
+                                   error_message=str(reason))
+    except KeyError:
+        print('no one updated')
+    if updated:
+        print 'updated'
+        return redirect("single/" + table + '/' + str(id))
+    if deleted:
+        print 'deleted'
+        return redirect("query/select/" + table)
     try:
         print 'check delete button'
         deleted = request.form['delete']
         deleted = True
-        print 'deleted button was pressed'
-        query = db.session.query(map_table(table)).filter(map_table(table).id == id).delete()
-        print 'delete id=' + str(id) + ' from ' + table
+        print 'delete button was pressed'
         try:
+            query = db.session.query(map_table(table)).filter(map_table(table).id == id).delete()
+            print 'delete id=' + str(id) + ' from ' + table
             db.session.commit()
         except sqlalchemy.exc.SQLAlchemyError, exc:
             reason = exc.message

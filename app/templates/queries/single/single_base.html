@@ -51,17 +51,23 @@
 										{% else %}
 											<select name="{{column.name}}" size="1">
 												{% for data in fk_data %}
-													<option value={{data[0]}}>{{data}}</option>
+													{% if val == data[0] %}
+														<option value={{val}}>{{data}}</option>
+													{% endif %}
+												{% endfor %}
+												{% for data in fk_data %}
+													{% if val != data[0] %}
+														<option value={{data[0]}}>{{data}}</option>
+													{% endif %}
 												{% endfor %}
 											</select>
 										{% endif %}
 									{% elif 'date' == column.name or 'datestart' == column.name or 'dateend' == column.name or 'birthdate' == column.name %}
-										<input type="text" style="width:100%;" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
+										<input type="text" style="width:100%;" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d" value="{{val}}">
 									{% else %}
-										<input type="text" style="width:100%;" name="{{column.name}}">
+										<input type="text" style="width:100%;" name="{{column.name}}" value="{{val}}">
 									{% endif %}
 								</td>
-
 							</tr>
 						{% endfor %}
 					</table>

@@ -210,7 +210,7 @@ class Structure_type(Base):
 		self.id = args.pop()
 		self.type_name = args.pop()
 	def short_data(self):
-		return [self.type_name]
+		return [self.id, self.type_name]
 	def data(self):
 		return[self.id, self.type_name]
 class Transfer(Base):
@@ -389,6 +389,10 @@ def map_fk(table):
 
 	return data
 
+
+gyms = db.session.query(Gym).filter(Gym.structure == 1)
+for line in gyms:
+	print line.address
 #list = [1,2,3]
 #x = db.session.query(Human).filter(Human.id.notin_(list))
 #for val in x:
