@@ -219,6 +219,29 @@ def show_single_post(table, id):
     columns = Base.metadata.tables[table].columns
     tbl = map_table(table)
     lines = db.session.query(tbl).filter(tbl.id == id)
+    deleted = False
+    try:
+        print 'check delete button'
+        deleted = request.form['delete']
+        deleted = True
+        print 'deleted button was pressed'
+        query = db.session.query(map_table(table)).filter(map_table(table).id == id).delete()
+        print 'delete id=' + str(id) + ' from ' + table
+        try:
+            db.session.commit()
+        except sqlalchemy.exc.SQLAlchemyError, exc:
+            reason = exc.message
+            print(reason)
+            return render_template('error.html',
+                                   title='Error',
+                                   rand=random.randint(1, 5),
+                                   user=user,
+                                   error_message=str(reason))
+    except KeyError:
+        print('no one deleted')
+    if deleted:
+        print 'deleted'
+        return redirect("query/select/" + table)
     if table == "Human":
         page = "human"
     if table == "Structure":
