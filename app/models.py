@@ -389,10 +389,10 @@ def map_fk(table):
 
 	return data
 
-list = [1,2,3]
-x = db.session.query(Human).filter(Human.id.notin_(list))
-for val in x:
-	print val.id
+#list = [1,2,3]
+#x = db.session.query(Human).filter(Human.id.notin_(list))
+#for val in x:
+#	print val.id
 #print("===============================")
 #print(Base.metadata.tables['Coach'].columns.keys())
 #for key in Base.metadata.tables['Coach'].foreign_keys:

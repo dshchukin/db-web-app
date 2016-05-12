@@ -221,10 +221,56 @@ def show_single_post(table, id):
         page = "human"
     if table == "Structure":
         page = "structure"
-        kick_id_str = request.form['kick']
-        kick_id = int(kick_id_str[5:])
-        structure = db.session.query(Structure).get(kick_id)
-        print 'kick ' + str(kick_id)
+        try:
+            print 'kicking...'
+            kick_id_str = request.form['kick']
+            kick_id = int(kick_id_str[5:])
+            structure = db.session.query(Structure).get(kick_id)
+            print 'kick ' + str(kick_id)
+        except KeyError:
+            print 'no one was kicked'
+
+        try:
+            add_request = request.form['add']
+            print 'adding...'
+            try:
+                add_human = request.form['add_human']
+                print 'human to add: '
+                print add_human
+            except KeyError:
+                flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            try:
+                datestart = request.form['datestart']
+                if datestart == '':
+                    flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
+                    return show_single(table, id)
+            except KeyError:
+                flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            vals = [None]
+            vals.append(add_human)
+            vals.append(id)
+            vals.append(datestart)
+            vals.append(None)
+            record = create_new_record('Transfer', vals)
+            db.session.add(record)
+            print vals
+            try:
+                db.session.commit()
+                print 'add ' + str(vals[0])
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            return show_single(table, id)
+        except KeyError:
+            print 'no one was added'
+
         gyms = db.session.query(Gym).filter(id == Gym.structure)
         participants = db.session.query(Transfer, Human).filter(id == Transfer.human and not Transfer.dateend).filter(Transfer.human == Human.id)
     if table == "Competition":

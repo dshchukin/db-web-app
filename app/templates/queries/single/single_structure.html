@@ -25,12 +25,12 @@
                         {% endfor %}
                     </table>
                     <h5>Add participant</h5>
-                    <select name="table" size="1">
+                    <select name="add_human" size="1">
                         {% for line in available_participants %}
                             <option value={{line.id}}>{{line.short_data()}}</option>
                         {% endfor %}
                     </select>
-                    <input type="text" name="datestart" placeholder="datestart" required>
+                    <input type="text" name="datestart" placeholder="datestart">
                     <input type="submit" name="add" value="Add" align="bottom">
 
 
