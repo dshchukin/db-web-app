@@ -166,10 +166,12 @@ def show_single(table, id):
     competitions = []
     gyms = []
     available_participants = []
+    coach_data = []
     participants = []
     structures = []
     if table == "Human":
         page = "human"
+        coach_data = db.session.query(Coach).filter(Coach.id == id).first()
     if table == "Structure":
         page = "structure"
         gyms = db.session.query(Gym).filter(Gym.structure == id)
@@ -196,9 +198,12 @@ def show_single(table, id):
         page = "seminar"
     date = datetime.datetime.now()
     today = date.strftime("%d-%m-%Y")
+    #print coach_data.category
+    #print coach_data.datestart
     return render_template('queries/single/single_' + page +'.html',
                               id = id,
                               today = today,
+                              coach_data = coach_data,
                               title='Single object',
                               user=user,
                               participants = participants,

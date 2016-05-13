@@ -1,4 +1,55 @@
 {% extends "/queries/single/single_base.html" %}
 {% block single_content %}
 <h1>Not done yet</h1>
+<form action="/single/{{table}}/{{id}}" method="POST">
+{% if coach_data %}
+
+    <div id="block_3">
+            <center><h1>
+                <details>
+                    <summary>
+                        As coach
+                    </summary>
+                    <table cellpadding="10" width="100%" border="1">
+                        <tr>
+                            <th>Category</th>
+                            <th>Datestart</th>
+                        </tr>
+                        <tr>
+                            {% if coach_data != None %}
+                                <td height="50"> {{ coach_data.category }} </td>
+                                <td height="50"> {{ coach_data.datestart }} </td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+{% endif %}
+<!--
+{% if gyms %}
+    <div id="block_5">
+            <center><h1>
+                <details>
+                    <summary>
+                        Gyms
+                    </summary>
+                        <table cellpadding="10" width="100%" border="1">
+                            <tr>
+                                <th>Gym</th>
+                            </tr>
+                            {% for line in gyms %}
+                                <tr>
+                                    <td height="50"><a href={{url_for('show_single', table = 'Gym', id = line.id)}}> {{ line.address}}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+{% endif %}
+-->
+</form>
 {% endblock %}
