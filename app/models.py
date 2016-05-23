@@ -7,6 +7,7 @@ from sqlalchemy_utils import *
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
 from sqlalchemy.orm import relationship, backref
+from sqlalchemy.sql import text
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
@@ -224,6 +225,19 @@ class Transfer(Base):
 		self.dateend = args.pop()
 	def data(self):
 		return[int(self.id), self.human, self.structure, self.datestart, self.dateend]
+class SQL_QUERY(Base):
+	__table__ = Base.metadata.tables['SQL_QUERY']
+	def __init__(self, args):
+		args = list(reversed(args))
+		self.id = args.pop()
+		self.name = args.pop()
+		self.description = args.pop()
+		self.query = args.pop()
+	def short_data(self):
+		return [int(self.id), self.name]
+	def data(self):
+		return[int(self.id), self.name, self.description, self.query]
+
 
 def create_new_record(table, args):
 	if table == 'Coach':
@@ -280,6 +294,9 @@ def create_new_record(table, args):
 	if table == 'Transfer':
 		return Transfer(args)
 
+	if table == 'SQL_QUERY':
+		return SQL_QUERY(args)
+
 def map_table(table):
 	if table == 'Coach':
 		return Coach
@@ -335,6 +352,9 @@ def map_table(table):
 	if table == 'Gym':
 		return Gym
 
+	if talbe == 'SQL_QUERY':
+		return SQL_QUERY
+
 	return 0
 
 def map_fk(table):
@@ -386,13 +406,28 @@ def map_fk(table):
 	if table == 'Examined':
 		for line in db.session.query(Examined):
 			data.append(line.short_data())
-
+	if table == 'SQL_QUERY':
+		for line in db.session.query(SQL_QUERY):
+			data.append(line.short_data())
 	return data
 
-
-gyms = db.session.query(Gym).filter(Gym.structure == 1)
-for line in gyms:
-	print line.address
+#records = db.session.execute(text('Select * from Human where id == :id'), {'id': '1'})
+#print '---records---'
+#for record in records.fetchall():
+#    print record
+#print '-------------'
+#import re
+#result = db.session.query(SQL_QUERY).filter(SQL_QUERY.id == 1).first()
+#print(result)
+#sql = result.query
+#params = re.findall('\[[a-zA-Z0-9_]+\]', sql)
+#print(params)
+#queries = db.session.query(SQL_QUERY)
+#for query in queries:
+#	print query.short_data()
+#gyms = db.session.query(Gym).filter(Gym.structure == 1)
+#for line in gyms:
+#	print line.address
 #list = [1,2,3]
 #x = db.session.query(Human).filter(Human.id.notin_(list))
 #for val in x:

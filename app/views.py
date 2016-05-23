@@ -3,8 +3,10 @@ from app import app, db
 from models import Base
 from models import *
 import sqlalchemy
+import re
 import sqlalchemy.ext.declarative
 import sqlalchemy.orm.interfaces
+from sqlalchemy.sql import text
 import sqlalchemy.exc
 import random
 import datetime
@@ -103,11 +105,8 @@ def insert_query_post():
 
 @app.route('/query/select')
 def select_query():
-    user = 'Denis' # user's nickname example
     return render_template('queries/select.html', 
         title = 'Select query',
-        user = user,
-        rand = random.randint(1,5),
         tables = Base.metadata.tables.keys())
 
 @app.route('/query/select/<table>')
@@ -435,3 +434,119 @@ def add_post(table):
             user = user,
             error_message = str(reason))
     return redirect("single/" + table + '/' + str(record.id))
+
+@app.route('/query/raw_sql')
+def raw_sql():
+    return render_template('queries/raw_sql.html',
+                           title='Raw SQL query')
+
+@app.route('/query/raw_sql/add')
+def raw_sql_add():
+    return render_template('queries/raw_sql_add.html',
+                           title='Raw SQL query')
+
+@app.route('/query/raw_sql/add', methods = ['POST'])
+def raw_sql_add_post():
+    sql = request.form['code']
+    if re.search('(?<!\[)(insert|delete|update|drop|alter|create)(?!\])', sql) is not None:
+        flash('Restricted keyword was used in SQL query', 'error')
+        return raw_sql_add()
+    name = request.form['name']
+    description = ''
+    try:
+        description = request.form['description']
+    except KeyError:
+        description = ''
+    vals = []
+    vals.append(None)
+    vals.append(name)
+    vals.append(description)
+    vals.append(sql)
+    record = create_new_record('SQL_QUERY', vals)
+    db.session.add(record)
+    try:
+        db.session.commit()
+        print 'add ' + str(record.id)
+    except sqlalchemy.exc.SQLAlchemyError, exc:
+        reason = exc.message
+        print(reason)
+        return render_template('error.html',
+                               title='Error',
+                               error_message=str(reason))
+    print(vals)
+    #return redirect("/query/raw_sql/use/" + str(record.id))
+    return redirect("/query/raw_sql")
+
+@app.route('/query/raw_sql/use')
+def raw_sql_use():
+    for line in db.session.query(SQL_QUERY):
+        print line.id
+    return render_template('queries/raw_sql_use.html',
+                           queries = db.session.query(SQL_QUERY),
+                           title='Raw SQL query')
+
+@app.route('/query/raw_sql/use', methods = ['POST'])
+def raw_sql_use_post():
+    try:
+        print 'deleting query...'
+        kick_id_str = request.form['delete']
+        kick_id = int(kick_id_str[7:])
+        x = db.session.query(SQL_QUERY).filter(SQL_QUERY.id == kick_id).delete()
+        try:
+            db.session.commit()
+        except sqlalchemy.exc.SQLAlchemyError, exc:
+            reason = exc.message
+            print(reason)
+            return render_template('error.html',
+                                   title='Error',
+                                   error_message=str(reason))
+    except KeyError:
+        print 'no one was deleted'
+    return render_template('queries/raw_sql_use.html',
+                           queries = db.session.query(SQL_QUERY),
+                           title='Raw SQL query')
+
+@app.route('/query/raw_sql/use/<query>')
+def raw_sql_use_need_data(query):
+
+    result = db.session.query(SQL_QUERY).filter(SQL_QUERY.id == query).first()
+    sql = result.query
+    params = re.findall('\[[a-zA-Z0-9_]+\]', sql)
+    return render_template('queries/raw_sql_use_need_data.html',
+                           params=params,
+                           query = query,
+                           title='Raw SQL query')
+
+@app.route('/query/raw_sql/use/<query>', methods = ['POST'])
+def raw_sql_use_need_data_post(query):
+    print 'here'
+    result = db.session.query(SQL_QUERY).filter(SQL_QUERY.id == query).first()
+    sql = result.query
+    params = re.findall('\[[a-zA-Z0-9_]+\]', sql)
+    vals = {}
+    for param in params:
+        try:
+            x = request.form[param]
+        except KeyError:
+            return render_template('error.html',
+                                  title='Error',
+                                  error_message="Wrong " + param)
+        new_param = re.sub('\[([a-zA-Z0-9_]+)\]', r'\1', param)
+        vals[new_param] = x
+    new_sql = re.sub('\[([a-zA-Z0-9_]+)\]', r':\1', sql)
+    print vals
+    print new_sql
+    records = []
+    try:
+        records = db.session.execute(text(new_sql), vals)
+    except sqlalchemy.exc.SQLAlchemyError, exc:
+        reason = exc.message
+        print(reason)
+        return render_template('error.html',
+                               title='Error',
+                               error_message=str(reason))
+    return render_template('queries/raw_sql_use_result.html',
+                           params=params,
+                           records = records.fetchall(),
+                           title='Raw SQL query')
+

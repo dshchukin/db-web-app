@@ -6,12 +6,12 @@
 <form action="/query/insert" method="POST">
 		{% if tables %}
 			<h1>Adding new object...</h1>
-			<b>Choose table:</b>
+			<!--<b>Choose table:</b>
 			<select name="table" size="1">
 				{% for table in tables %}
 					<option value={{table}}>{{table}}</option>
 				{% endfor %}
-			</select>
+			</select>-->
 		{% elif columns%}
 			<h1>Adding new {{table}}</h1>
 			<input type="text" name="table" width="100%" readonly value="{{ table }}">
@@ -44,7 +44,7 @@
 				{% endfor %}
 			</table>
 	    {% endif %}
-	    {% if columns or tables %}
+	    {% if columns %}
        		<input type="submit" name="my-form" value="Send" align="bottom">
         {% endif %}
 

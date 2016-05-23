@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='raw_sql.css') }}">
+<center><h1>What do you want to do?</h1></center>
+<table width="100%"><tr>
+    <td width="30%">
+        <a href="/query/raw_sql/add">
+            <div id="add">
+                 <center>
+                     <h1>Add new raw-SQL query</h1>
+                     <h1><br></h1>
+                     <img src="/static/icons/db/add.png" alt="Add data" style="width:200px;height:200px;">
+                     <p></p>
+                 </center>
+            </div>
+        </a>
+    </td>
+
+    <td width="30%">
+        <a href="/query/raw_sql/use">
+            <div id="use">
+                <center>
+                    <h1>Use existing</h1>
+                    <h1>raw-SQL query</h1>
+                    <img src="/static/icons/db/db.png" alt="Select data" style="width:200px;height:200px;">
+                    <p></p>
+                </center>
+            </div>
+        </a>
+    </td>
+
+</tr></table>
+{% endblock %}

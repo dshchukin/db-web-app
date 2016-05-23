@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_row.css') }}">
+<form action="/query/raw_sql/use/{{query}}" method="POST">
+    <center>
+    <h1>Enter parameter's values</h1>
+    {% if params %}
+        <table border="1">
+            <tr>
+                    <th> Parameter </th>
+                    <th> Value </th>
+            </tr>
+            {% for param in params %}
+                <tr>
+                    <td> {{param}} </td>
+                    <td> <input type="text" name="{{param}}"> </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p><br></p>
+    </center>
+    {% endif %}
+    <input type="submit" name="my-form" value="Send" align="bottom">
+</form>
+{% endblock %}

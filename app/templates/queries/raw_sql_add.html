@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='insert.css') }}"/>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_cell.css') }}"/>
+
+<link rel="stylesheet" href="../../static/CodeMirror/lib/codemirror.css">
+<link rel="stylesheet" href="../../static/CodeMirror/theme/3024-day.css">
+
+<script src="../../static/CodeMirror/lib/codemirror.js"></script>
+<script src="../../static/CodeMirror/mode/sql/sql.js"></script>
+
+<form action="/query/raw_sql/add" method="POST">
+		<table width="100%"><tr>
+		<td>
+			<center>
+			<h1>Enter SQL query:</h1>
+				</center>
+			<textarea id="code" name="code"> </textarea>
+		</td>
+		<td>
+			<center>
+			<h1>Enter name:</h1>
+				</center>
+				<input type="text" id="name" name="name" style="width:100%;" required/>
+			<center>
+			<h1>Enter description:</h1>
+				</center>
+			<textarea id="description" name="description" required style="width:100%; height:99px;"> </textarea>
+		</td>
+		</tr></table>
+		<input type="submit" name="my-form" value="Send">
+        <br />
+</form>
+
+{% if rand_num %}
+	<center><img src="/static/icons/karate/{{rand_num}}.png" alt="karate" style="width:300px;height:300px;"></center>
+{% else %}
+	<center><img src="/static/icons/karate/3.png" alt="karate" style="width:300px;height:300px;"></center>
+{% endif %}
+
+<script>
+    window.onload = function() {
+        window.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+            mode: "text/x-sql",
+            theme: "3024-day",
+            lineNumbers: true,
+            lineWrapping: true,
+            height: 200
+        });
+    };
+</script>
+
+{% endblock %}
