@@ -1,21 +1,15 @@
 #insert{
-    background:#C0C0C0;
-    border:3px solid black;
     margin-bottom: 10px;
     height: 380px;
-    width: 95%;
+    width: 90%;
 }
 #select{
-    background:#C0C0C0;
-    border:3px solid black;
     margin-bottom: 10px;
     height: 380px;
-    width: 95%;
+    width: 90%;
 }
 #raw_sql{
-    background:#C0C0C0;
-    border:3px solid black;
     margin-bottom: 10px;
     height: 380px;
-    width: 95%;
+    width: 90%;
 }

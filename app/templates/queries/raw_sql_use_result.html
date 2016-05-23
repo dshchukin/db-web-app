@@ -4,11 +4,11 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_row.css') }}">
 <h1>Records</h1>
 {% if records %}
-	<table border="1">
+	<table class="nice" border="1">
         {% for record in records %}
-			<tr>
+			<tr class="nice">
 			{% for col in record %}
-        		<td>{{ col }} </td>
+        		<td class="nice">{{ col }} </td>
 			{% endfor %}
 			</tr>
 	    {% endfor %}

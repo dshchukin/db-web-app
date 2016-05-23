@@ -74,10 +74,11 @@ class Examined(Base):
 		self.id = args.pop()
 		self.result = args.pop()
 		self.exam_id = args.pop()
+		self.human_id = args.pop()
 	def short_data(self):
 		return[int(self.id), self.result, db.session.query(Exam).filter(Exam.id == self.exam_id).first().place, db.session.query(Exam).filter(Exam.id == self.exam_id).first().date]
 	def data(self):
-		return[int(self.id), self.result, self.exam_id]
+		return[int(self.id), self.result, self.exam_id, self.human_id]
 class Examiners(Base):
 	__table__ = Base.metadata.tables['Examiners']
 	def __init__(self, args):
@@ -110,14 +111,13 @@ class Human(Base):
 		self.address = args.pop()
 		self.country = args.pop()
 		self.city = args.pop()
-		self.diploma = args.pop()
 		self.last_medical_exam = args.pop()
 		self.insurance_num = args.pop()
 		self.insurance_expires = args.pop()
 	def short_data(self):
 		return[int(self.id), self.firstname, self.middlename, self.surname]
 	def data(self):
-		return[int(self.id), self.firstname, self.middlename, self.surname, self.birthdate, self.TIN, self.phone, self.address, self.country, self.city, self.diploma, self.last_medical_exam, self.insurance_num, self.insurance_expires]
+		return[int(self.id), self.firstname, self.middlename, self.surname, self.birthdate, self.TIN, self.phone, self.address, self.country, self.city, self.last_medical_exam, self.insurance_num, self.insurance_expires]
 class Judge(Base):
 	__table__ = Base.metadata.tables['Judge']
 	def __init__(self, args):

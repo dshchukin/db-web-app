@@ -1,7 +1,4 @@
 #data{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
     width:500px;
     max-width:500px;
     overflow: hidden;
@@ -10,9 +7,6 @@
     clear:left;
 }
 #delete{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
     overflow: hidden;
     margin-bottom: 10px;
     width:500px;
@@ -21,9 +15,6 @@
     clear:right;
 }
 #update{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
     overflow: hidden;
     margin-bottom: 10px;
     width:500px;
@@ -40,9 +31,6 @@
 }
 
 #block_3{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
     overflow: hidden;
     margin-bottom: 10px;
     width:500px;
@@ -52,9 +40,6 @@
 }
 
 #block_5{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
     overflow: hidden;
     margin-bottom: 10px;
     width:500px;
@@ -64,9 +49,6 @@
 }
 
 #block_6{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
     width:500px;
     max-width:500px;
     overflow: hidden;
@@ -76,9 +58,6 @@
 }
 
 #block_7{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
     width:500px;
     max-width:500px;
     overflow: hidden;
@@ -88,9 +67,6 @@
 }
 
 #block_8{
-    border-radius: 15px;
-    background:#C0C0C0;
-    border:1px solid black;
     width:500px;
     max-width:500px;
     overflow: hidden;
@@ -99,9 +75,6 @@
     clear:right;
 }
 
-tr:hover { background: #FFFFFF; }
-td a {
-    display: block;
-    border: 1px solid white;
-    padding: 16px;
-}
+tr:hover { background: #dcefdc; }
+tr.nice:nth-child(even):hover{background-color: #dcefdc;}
+

@@ -1,6 +1,6 @@
-tr:hover { background: #C0C0C0; }
+tr:hover { background: #dcefdc; }
+tr.nice:nth-child(even):hover{background-color: #dcefdc;}
+
 td a {
     display: block;
-    border: 1px solid black;
-    padding: 16px;
 }

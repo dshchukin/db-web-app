@@ -4,23 +4,23 @@
 <form action="/single/{{table}}/{{id}}" method="POST">
 {% if participants %}
 
-    <div id="block_3">
+    <div class="nice" id="block_3">
             <center><h1>
                 <details>
                     <summary>
                         Participants
                     </summary>
-                    <table cellpadding="10" width="100%" border="1">
-                        <tr>
-                            <th>Structure</th>
-                            <th>From</th>
-                            <th>Kick</th>
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Structure</th>
+                            <th class="nice">From</th>
+                            <th class="nice">Kick</th>
                         </tr>
                         {% for line in participants %}
-                            <tr>
-                                <td height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].short_data()}}</a></td>
-                                <td height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].datestart }}</a></td>
-                                <td><input type="submit" name="kick" value="Kick {{line[1].id}}" align="bottom"></td>
+                            <tr class="nice">
+                                <td class="nice" height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].short_data()}}</a></td>
+                                <td class="nice" height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].datestart }}</a></td>
+                                <td class="nice"><input type="submit" name="kick" value="Kick {{line[1].id}}" align="bottom"></td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -40,19 +40,19 @@
     </div>
 {% endif %}
 {% if gyms %}
-    <div id="block_5">
+    <div class="nice" id="block_5">
             <center><h1>
                 <details>
                     <summary>
                         Gyms
                     </summary>
-                        <table cellpadding="10" width="100%" border="1">
-                            <tr>
-                                <th>Gym</th>
+                        <table class="nice" cellpadding="10" width="100%" border="1">
+                            <tr class="nice">
+                                <th class="nice">Gym</th>
                             </tr>
                             {% for line in gyms %}
-                                <tr>
-                                    <td height="50"><a href={{url_for('show_single', table = 'Gym', id = line.id)}}> {{ line.address}}</a></td>
+                                <tr class="nice">
+                                    <td class="nice" height="50"><a href={{url_for('show_single', table = 'Gym', id = line.id)}}> {{ line.address}}</a></td>
                                 </tr>
                             {% endfor %}
                         </table>

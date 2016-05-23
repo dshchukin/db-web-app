@@ -4,22 +4,22 @@
 <center><h1>{{table}}</h1></center>
 
 <form action="/single/{{table}}/{{id}}" method="POST">
-<div id="data">
+<div class="nice" id="data">
 		<center><h1>
 			<details>
 				<summary>
 							Data
 				</summary>
 					{% if data %}
-						<table cellpadding="10" border="1">
-							<tr>
-								<th>Column</th>
-								<th>Value</th>
+						<table class="nice" cellpadding="10" border="1">
+							<tr class="nice">
+								<th class="nice">Column</th>
+								<th class="nice">Value</th>
 							</tr>
 							{% for col, val, fk in data %}
-								<tr>
-									<td height="50">{{ col.name }}</td>
-									<td height="50">{{ val }}</td>
+								<tr class="nice">
+									<td class="nice" height="50">{{ col.name }}</td>
+									<td class="nice" height="50">{{ val }}</td>
 								</tr>
 							{% endfor %}
 						</table>
@@ -28,7 +28,7 @@
 		</h1></center>
 	<p></p>
 </div>
-<div id="update">
+<div class="nice" id="update">
 		<center>
 			<h1>
 				<details>
@@ -36,13 +36,13 @@
 								Modify this object
 					</summary>
 
-					<table cellpadding="10" width="100%" border="1">
-						<tr>
-							<th>New value</th>
+					<table class="nice" cellpadding="10" width="100%" border="1">
+						<tr class="nice">
+							<th class="nice">New value</th>
 						</tr>
 						{% for column, val, fk_data in data%}
-							<tr>
-								<td height="50">
+							<tr class="nice">
+								<td class="nice" height="50">
 									{% if column.name == "id" %}
 										<input type="text" name="{{column.name}}" style="width:100%;background: #D3D3D3" readonly value="{{val}}">
 									{% elif fk_data != None %}
@@ -78,7 +78,7 @@
 		</center>
 	<p></p>
 </div>
-<div id="delete">
+<div class="nice" id="delete">
 	<center>
 		<h1>
 			<details>

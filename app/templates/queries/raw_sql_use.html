@@ -5,15 +5,15 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_row.css') }}">
 <h1>Choose query</h1>
 {% if queries %}
-	<table border="1">
-		<tr>
-		        <th> Query name </th>
-				<th> </th>
+	<table class="nice" border="1">
+		<tr class="nice">
+		        <th class="nice"> Query name </th>
+				<th class="nice"> </th>
 	 	</tr>
         {% for query in queries %}
-        	<tr>
-	        	<td> <a href={{url_for('raw_sql_use_need_data', query = query.id)}}> {{ query.name }} </a> </td>
-				<td> <input type="submit" name="delete" value="Delete {{query.id}}" align="bottom" style="width:100%; height:100%"> </td>
+        	<tr class="nice">
+	        	<td class="nice"> <a href={{url_for('raw_sql_use_need_data', query = query.id)}}> {{ query.name }} </a> </td>
+				<td class="nice"> <input type="submit" name="delete" value="Delete {{query.id}}" align="bottom" style="width:100%; height:100%"> </td>
 	       	</tr>
 	    {% endfor %}
 	</table>

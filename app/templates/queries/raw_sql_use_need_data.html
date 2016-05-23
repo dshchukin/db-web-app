@@ -6,15 +6,15 @@
     <center>
     <h1>Enter parameter's values</h1>
     {% if params %}
-        <table border="1">
-            <tr>
-                    <th> Parameter </th>
-                    <th> Value </th>
+        <table class="nice" border="1">
+            <tr class="nice">
+                    <th class="nice"> Parameter </th>
+                    <th class="nice"> Value </th>
             </tr>
             {% for param in params %}
-                <tr>
-                    <td> {{param}} </td>
-                    <td> <input type="text" name="{{param}}"> </td>
+                <tr class="nice">
+                    <td class="nice"> {{param}} </td>
+                    <td class="nice"> <input type="text" name="{{param}}"> </td>
                 </tr>
             {% endfor %}
         </table>

@@ -1,63 +1,41 @@
+
+
 #gym{
-    border-radius: 15px;
-    padding: 1rem;
-    background:#C0C0C0;
-    border:1px solid black;
     width:200px;
     float:left;
     clear:left;
 }
 #human{
-    border-radius: 15px;
-    padding: 1rem;
-    background:#C0C0C0;
-    border:1px solid black;
     width:200px;
     float:right;
     clear:right;
 }
 #competition{
-    border-radius: 15px;
-    padding: 1rem;
-    background:#C0C0C0;
-    border:1px solid black;
     width:200px;
     float:right;
 }
 
 #seminar{
-    border-radius: 15px;
-    padding: 1rem;
-    background:#C0C0C0;
-    border:1px solid black;
     width:200px;
     float:left;
     clear:left;
 }
 
 #structure{
-    border-radius: 15px;
-    padding: 1rem;
-    background:#C0C0C0;
-    border:1px solid black;
     width:200px;
     float:left;
     clear:left;
 }
 
 #exam{
-    border-radius: 15px;
-    padding: 1rem;
-    background:#C0C0C0;
-    border:1px solid black;
     width:200px;
     float:right;
     clear:right;
 }
 
-#gym:hover { background: #FFFFFF; }
-#human:hover { background: #FFFFFF; }
-#competition:hover { background: #FFFFFF; }
-#seminar:hover { background: #FFFFFF; }
-#structure:hover { background: #FFFFFF; }
-#exam:hover { background: #FFFFFF; }
+#gym:hover { background: #f0f0f0; }
+#human:hover { background: #f0f0f0; }
+#competition:hover { background: #f0f0f0; }
+#seminar:hover { background: #f0f0f0; }
+#structure:hover { background: #f0f0f0; }
+#exam:hover { background: #f0f0f0; }

@@ -4,21 +4,21 @@
 <form action="/single/{{table}}/{{id}}" method="POST">
 {% if coach_data %}
 
-    <div id="block_3">
+    <div class="nice" id="block_3">
             <center><h1>
                 <details>
-                    <summary>
+                    <summary>sdf
                         As coach
                     </summary>
-                    <table cellpadding="10" width="100%" border="1">
-                        <tr>
-                            <th>Category</th>
-                            <th>Datestart</th>
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Category</th>
+                            <th class="nice">Datestart</th>
                         </tr>
-                        <tr>
+                        <tr class="nice">
                             {% if coach_data != None %}
-                                <td height="50"> {{ coach_data.category }} </td>
-                                <td height="50"> {{ coach_data.datestart }} </td>
+                                <td class="nice" height="50"> {{ coach_data.category }} </td>
+                                <td class="nice" height="50"> {{ coach_data.datestart }} </td>
                             {% endif %}
                         </tr>
                     </table>

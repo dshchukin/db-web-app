@@ -519,7 +519,6 @@ def raw_sql_use_need_data(query):
 
 @app.route('/query/raw_sql/use/<query>', methods = ['POST'])
 def raw_sql_use_need_data_post(query):
-    print 'here'
     result = db.session.query(SQL_QUERY).filter(SQL_QUERY.id == query).first()
     sql = result.query
     params = re.findall('\[[a-zA-Z0-9_]+\]', sql)
@@ -534,8 +533,6 @@ def raw_sql_use_need_data_post(query):
         new_param = re.sub('\[([a-zA-Z0-9_]+)\]', r'\1', param)
         vals[new_param] = x
     new_sql = re.sub('\[([a-zA-Z0-9_]+)\]', r':\1', sql)
-    print vals
-    print new_sql
     records = []
     try:
         records = db.session.execute(text(new_sql), vals)

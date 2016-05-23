@@ -15,11 +15,11 @@
 		{% elif columns%}
 			<h1>Adding new {{table}}</h1>
 			<input type="text" name="table" width="100%" readonly value="{{ table }}">
-			<table>
+			<table class="nice">
 				{% for column, fk_data in columns %}
-					<tr>
-					<td><b>{{ column.name }}:</b></td>
-					<td>
+					<tr class="nice">
+					<td class="nice"><b>{{ column.name }}:</b></td>
+					<td class="nice">
 						{% if fk_data != None %}
 							{% if fk_data == [] %}
 								<input type="text" name="{{column.name}}" readonly value="None">
@@ -54,22 +54,29 @@
 			<p></p>
 			<table>
 				<tr>
-					<td> <a href={{url_for('add', table = 'Gym')}}>  <center> <div id="gym">Gym</div> </center> </a> </td>
-					<td> <a href={{url_for('add', table = 'Human')}}> <center> <div id="human">Human</div> </center> </a> </td>
-					<td> <a href={{url_for('add', table = 'Competition')}}> <center> <div id="competition">Competition</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Gym')}}>  <center> <div class="nice" id="gym">Gym</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Human')}}> <center> <div class="nice" id="human">Human</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Competition')}}> <center> <div class="nice" id="competition">Competition</div> </center> </a> </td>
 				</tr>
 				<tr>
-					<td> <a href={{url_for('add', table = 'Seminar')}}> <center> <div id="seminar">Seminar</div> </center> </a> </td>
-					<td> <a href={{url_for('add', table = 'Structure')}}> <center> <div id="structure">Structure</div> </center> </a> </td>
-					<td> <a href={{url_for('add', table = 'Exam')}}> <center> <div id="exam">Exam</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Seminar')}}> <center> <div class="nice" id="seminar">Seminar</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Structure')}}> <center> <div class="nice" id="structure">Structure</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Exam')}}> <center> <div class="nice" id="exam">Exam</div> </center> </a> </td>
 				</tr>
 			</table>
 		{% endif %}
 </form>
 </center>
-{% if rand_num %}
-	<center><img src="/static/icons/karate/{{rand_num}}.png" alt="karate" style="width:300px;height:300px;"></center>
-{% else %}
-	<center><img src="/static/icons/karate/3.png" alt="karate" style="width:300px;height:300px;"></center>
-{% endif %}
+{% set rand_num = [1,2,3,4,5]|random() %}
+      {% if rand_num == 1 %}
+        <center><img src="/static/icons/karate/1.png" alt="karate" style="width:300px;height:300px;" ></center>
+      {% elif rand_num == 2 %}
+        <center><img src="/static/icons/karate/2.png" alt="karate" style="width:300px;height:300px;" ></center>
+      {% elif rand_num == 3 %}
+        <center><img src="/static/icons/karate/3.png" alt="karate" style="width:300px;height:300px;" ></center>
+      {% elif rand_num == 4 %}
+        <center><img src="/static/icons/karate/4.png" alt="karate" style="width:300px;height:300px;" ></center>
+      {% elif rand_num == 5 %}
+        <center><img src="/static/icons/karate/5.png" alt="karate" style="width:300px;height:300px;" ></center>
+      {% endif %}
 {% endblock %}

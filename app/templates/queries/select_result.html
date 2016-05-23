@@ -4,16 +4,16 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_row.css') }}">
 <h1>Data from {{table}}</h1>
 {% if columns and result %}
-	<table border="1">
-		<tr>
+	<table class="nice" border="1">
+		<tr class="nice">
 			{% for name in columns %}
-		        <th>{{ name.key }} </th>
+		        <th class="nice">{{ name.key }} </th>
 		    {% endfor %}
 	 	</tr>
         {% for line in result %}
-        	<tr>
+        	<tr class="nice">
         	{% for val in line %}
-	        	<td><a href={{url_for('show_single', table = table, id = line[0])}}> {{ val }} </a></td>
+	        	<td class="nice"><a href={{url_for('show_single', table = table, id = line[0])}}> {{ val }} </a></td>
 	        {% endfor %}
 	       	</tr>
 	    {% endfor %}

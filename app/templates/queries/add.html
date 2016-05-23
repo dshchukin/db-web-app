@@ -12,9 +12,12 @@
 					<option value={{table}}>{{table}}</option>
 				{% endfor %}
 			</select>
+			<button class="button button1" name="my-form" value="Send" align="bottom">
 		{% elif columns%}
 			<h1>Adding new {{table}}</h1>
 			<input type="text" name="table" width="100%" readonly value="{{ table }}">
+			<table><tr>
+			<td>
 			<table>
 				{% for column, fk_data in columns %}
 					<tr>
@@ -44,10 +47,11 @@
 					</tr>
 				{% endfor %}
 			</table>
+			</td>
+			<td><button class="button button1" name="my-form" value="Send" align="bottom" style="width:150px;height:100%;">Send</button></td>
+			</tr></table>
+
 	    {% endif %}
-	    {% if columns or tables %}
-       		<input type="submit" name="my-form" value="Send" align="bottom">
-        {% endif %}
 
 		{% if tables %}
 			<p></p>
@@ -55,14 +59,14 @@
 			<p></p>
 			<table>
 				<tr>
-					<td> <a href={{url_for('add', table = 'Gym')}}>  <center> <div id="gym">Gym</div> </center> </a> </td>
-					<td> <a href={{url_for('add', table = 'Human')}}> <center> <div id="human">Human</div> </center> </a> </td>
-					<td> <a href={{url_for('add', table = 'Competition')}}> <center> <div id="competition">Competition</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Gym')}}>  <center> <div class="nice" id="gym">Gym</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Human')}}> <center> <div class="nice" id="human">Human</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Competition')}}> <center> <div class="nice" id="competition">Competition</div> </center> </a> </td>
 				</tr>
 				<tr>
-					<td> <a href={{url_for('add', table = 'Seminar')}}> <center> <div id="seminar">Seminar</div> </center> </a> </td>
-					<td> <a href={{url_for('add', table = 'Structure')}}> <center> <div id="structure">Structure</div> </center> </a> </td>
-					<td> <a href={{url_for('add', table = 'Exam')}}> <center> <div id="exam">Exam</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Seminar')}}> <center> <div class="nice" id="seminar">Seminar</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Structure')}}> <center> <div class="nice" id="structure">Structure</div> </center> </a> </td>
+					<td> <a href={{url_for('add', table = 'Exam')}}> <center> <div class="nice" id="exam">Exam</div> </center> </a> </td>
 				</tr>
 			</table>
 		{% endif %}
