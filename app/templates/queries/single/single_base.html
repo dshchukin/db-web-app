@@ -46,10 +46,10 @@
 							<tr class="nice">
 								<td class="nice" height="50">
 									{% if column.name == "id" %}
-										<input type="text" name="{{column.name}}" style="width:100%;background: #D3D3D3" readonly value="{{val}}">
+										<input class="input" type="text" name="{{column.name}}" style="width:100%;background: #D3D3D3" readonly value="{{val}}">
 									{% elif fk_data != None %}
 										{% if fk_data == [] %}
-											<input type="text" name="{{column.name}}" style="width:100%;background: #D3D3D3" readonly value="None" title="No variants to be chosen from">
+											<input class="input" type="text" name="{{column.name}}" style="width:100%;background: #D3D3D3" readonly value="None" title="No variants to be chosen from">
 										{% else %}
 											<select name="{{column.name}}" size="1">
 												{% for data in fk_data %}
@@ -65,9 +65,9 @@
 											</select>
 										{% endif %}
 									{% elif 'date' == column.name or 'datestart' == column.name or 'dateend' == column.name or 'birthdate' == column.name %}
-										<input type="text" style="width:100%;" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d" value="{{val}}">
+										<input class="input" type="text" style="width:100%;" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d" value="{{val}}">
 									{% else %}
-										<input type="text" style="width:100%;" name="{{column.name}}" value="{{val}}">
+										<input class="input" type="text" style="width:100%;" name="{{column.name}}" value="{{val}}">
 									{% endif %}
 								</td>
 							</tr>

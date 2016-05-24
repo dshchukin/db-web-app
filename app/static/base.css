@@ -114,7 +114,7 @@ th.nice {
 }
 
 .inline-link {
-    border: 2px solid #4CAF50;
+    border: 1px solid #4CAF50;
     display: inline-block;
     margin: 0 0.2em;
     padding: 3px;
@@ -125,4 +125,10 @@ th.nice {
     text-decoration: none;
     font-weight: bold;
     color: white;
+}
+
+.input:focus {
+    outline: none !important;
+    border:2px solid #4CAF50;
+    box-shadow: 0 0 10px #719ECE;
 }

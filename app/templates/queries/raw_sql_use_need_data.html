@@ -23,13 +23,13 @@
             {% for param in params %}
                 <tr class="nice">
                     <td class="nice"> {{param}} </td>
-                    <td class="nice"> <input type="text" name="{{param}}"> </td>
+                    <td class="nice"> <input class="input" type="text" name="{{param}}"> </td>
                 </tr>
             {% endfor %}
         </table>
         <p><br></p>
     </center>
     {% endif %}
-    <input type="submit" name="my-form" value="Send" align="bottom">
+    <div align="right"><button class="button button1" name="my-form" value="Send" style="width:150px;height:45px"> Send </button></div>
 </form>
 {% endblock %}

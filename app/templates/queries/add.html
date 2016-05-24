@@ -15,7 +15,7 @@
 			<button class="button button1" name="my-form" value="Send" align="bottom">
 		{% elif columns%}
 			<h1>Adding new {{table}}</h1>
-			<input type="text" name="table" width="100%" readonly value="{{ table }}">
+			<input class="input" type="text" name="table" width="100%" readonly value="{{ table }}">
 			<table><tr>
 			<td>
 			<table>
@@ -27,7 +27,7 @@
 						<td>
 							{% if fk_data != None %}
 								{% if fk_data == [] %}
-									<input type="text" name="{{column.name}}" readonly value="None" style="width:100%;">
+									<input class="input" type="text" name="{{column.name}}" readonly value="None" style="width:100%;">
 									<p>Object could not be added - "{{column.name}}" field has no variants to be chosen from</p>
 								{% else %}
 									<select name="{{column.name}}" size="1" style="width:100%;">
@@ -37,11 +37,11 @@
 									</select>
 								{% endif %}
 							{% elif column.name == "id" %}
-								<input type="text" name="{{column.name}}" style="background: #D3D3D3" readonly value="" hidden style="width:100%;">
+								<input class="input" type="text" name="{{column.name}}" style="background: #D3D3D3" readonly value="" hidden style="width:100%;">
 						{% elif 'date' == column.name or column.name == 'last_medical_exam' or column.name == 'insurance_expires' or 'datestart' == column.name or 'dateend' == column.name or 'birthdate' == column.name %}
-							<input type="text" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d" style="width:100%;">
+							<input class="input" type="text" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d" style="width:100%;">
 						{% else %}
-							<input type="text" name="{{column.name}}" style="width:100%;">
+							<input class="input" type="text" name="{{column.name}}" style="width:100%;">
 						{% endif %}
 						</td>
 					</tr>

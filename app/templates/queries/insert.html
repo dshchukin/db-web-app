@@ -6,48 +6,7 @@
 <form action="/query/insert" method="POST">
 		{% if tables %}
 			<h1>Adding new object...</h1>
-			<!--<b>Choose table:</b>
-			<select name="table" size="1">
-				{% for table in tables %}
-					<option value={{table}}>{{table}}</option>
-				{% endfor %}
-			</select>-->
-		{% elif columns%}
-			<h1>Adding new {{table}}</h1>
-			<input type="text" name="table" width="100%" readonly value="{{ table }}">
-			<table class="nice">
-				{% for column, fk_data in columns %}
-					<tr class="nice">
-					<td class="nice"><b>{{ column.name }}:</b></td>
-					<td class="nice">
-						{% if fk_data != None %}
-							{% if fk_data == [] %}
-								<input type="text" name="{{column.name}}" readonly value="None">
-								<p>Object could not be added - "{{column.name}}" field has no variants to be chosen from</p>
-							{% else %}
-								<select name="{{column.name}}" size="1">
-									{% for data in fk_data %}
-										<option value={{data[0]}}>{{data}}</option>
-									{% endfor %}
-								</select>
-							{% endif %}
-						{% elif column.name == "id" %}
-							<input type="text" name="{{column.name}}" style="background: #D3D3D3" readonly value="">
-
-					{% elif 'date' == column.name or 'datestart' == column.name or 'dateend' == column.name or 'birthdate' == column.name %}
-						<input type="text" name="{{column.name}}" placeholder="dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
-					{% else %}
-						<input type="text" name="{{column.name}}">
-					{% endif %}
-					</td>
-					</tr>
-				{% endfor %}
-			</table>
-	    {% endif %}
-	    {% if columns %}
-       		<input type="submit" name="my-form" value="Send" align="bottom">
-        {% endif %}
-
+		{% endif %}
 		{% if tables %}
 			<p></p>
 			<p></p>
