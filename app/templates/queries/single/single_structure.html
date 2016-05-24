@@ -10,6 +10,7 @@
                     <summary>
                         Participants
                     </summary>
+                    <br>
                     <table class="nice" cellpadding="10" width="100%" border="1">
                         <tr class="nice">
                             <th class="nice">Structure</th>
@@ -20,18 +21,18 @@
                             <tr class="nice">
                                 <td class="nice" height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].short_data()}}</a></td>
                                 <td class="nice" height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].datestart }}</a></td>
-                                <td class="nice"><input class="input" type="submit" name="kick" value="Kick {{line[1].id}}" align="bottom"></td>
+                                <td class="nice"><input type="submit" name="kick" value="Kick {{line[1].id}}" align="bottom" style="width:100%;height:100%;"></td>
                             </tr>
                         {% endfor %}
                     </table>
-                    <h5>Add participant</h5>
+                    <h5 style="margin-bottom:5px;">Add participant</h5>
                     <select name="add_human" size="1">
                         {% for line in available_participants %}
                             <option value={{line.id}}>{{line.short_data()}}</option>
                         {% endfor %}
                     </select>
                     <input class="input" type="text" name="datestart" placeholder="datestart: dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
-                    <input class="input" type="submit" name="add" value="Add" align="bottom">
+                    <input class="button button1" type="submit" name="add" value="Add" style="width:100%;height:70px;"  align="bottom">
 
 
                 </details>

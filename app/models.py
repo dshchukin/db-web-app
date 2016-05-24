@@ -352,10 +352,10 @@ def map_table(table):
 	if table == 'Gym':
 		return Gym
 
-	if talbe == 'SQL_QUERY':
+	if table == 'SQL_QUERY':
 		return SQL_QUERY
 
-	return 0
+	return None
 
 def map_fk(table):
 	print('table name = ' + str(table))

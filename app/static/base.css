@@ -127,8 +127,29 @@ th.nice {
     color: white;
 }
 
-.input:focus {
+input:focus {
     outline: none !important;
     border:2px solid #4CAF50;
     box-shadow: 0 0 10px #719ECE;
+}
+textarea:focus {
+    outline: none !important;
+    border:2px solid #4CAF50;
+    box-shadow: 0 0 10px #719ECE;
+}
+
+select {
+    border: 1px solid #3e8e41;
+    display: inline-block;
+    padding: 3px;
+    background: #4CAF50;
+    transition: all 0.3s ease-out;
+    /* Font styles */
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+}
+
+select:focus {
+    outline: none !important;
 }

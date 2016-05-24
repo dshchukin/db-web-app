@@ -114,6 +114,9 @@ def select_query():
 
 @app.route('/query/select/<table>')
 def select(table):
+    if map_table(table) == None:
+        flash('No such table: ' + table, 'error')
+        return redirect("/index")
     user = 'Denis' # user's nickname example
     flash('Select from ' + table, 'note')
     lines = []
@@ -143,15 +146,16 @@ def select_query_post():
 
 @app.route('/single/<table>/<int:id>')
 def show_single(table, id):
+    if map_table(table) == None:
+        flash('No such table: ' + table, 'error')
+        return redirect("/index")
     user = 'Denis' # user's nickname example
     columns = Base.metadata.tables[table].columns
     tbl = map_table(table)
     lines = db.session.query(tbl).filter(tbl.id == id)
     if not lines.first():
-        return render_template('error.html',
-            title = 'Error',
-            user = user,
-            error_message = "No object with such id")
+        flash('No object with such id in ' + table + ": " + str(id), 'error')
+        return redirect("/index")
     fks = []
     for col in Base.metadata.tables[table].columns:
         fk_data = None
@@ -219,6 +223,12 @@ def show_single(table, id):
 
 @app.route('/single/<table>/<int:id>', methods = ['POST'])
 def show_single_post(table, id):
+    if map_table(table) == None:
+        flash('No such table: ' + table, 'error')
+        return redirect("/index")
+    if not db.session.query(map_table(table)).filter(map_table(table).id == id).first():
+        flash('No object with such id in ' + table + ": " + str(id), 'error')
+        return redirect("/index")
     print 'post'
     date = datetime.datetime.now()
     today = date.strftime("%d-%m-%Y")
@@ -423,6 +433,9 @@ def show_single_post(table, id):
 
 @app.route('/add/<table>')
 def add(table):
+    if map_table(table) == None:
+        flash('No such table: ' + table, 'error')
+        return redirect("/index")
     fks = []
     for col in Base.metadata.tables[table].columns:
         fk_data = None
@@ -443,6 +456,9 @@ def add(table):
 
 @app.route('/add/<table>', methods = ['POST'])
 def add_post(table):
+    if map_table(table) == None:
+        flash('No such table: ' + table, 'error')
+        return redirect("/index")
     user = 'Denis' # user's nickname example
     num_of_cols = len(Base.metadata.tables[table].columns)
     vals = []
@@ -553,7 +569,9 @@ def raw_sql_use_post():
 
 @app.route('/query/raw_sql/use/<query>')
 def raw_sql_use_need_data(query):
-
+    if not db.session.query(SQL_QUERY).filter(SQL_QUERY.id == query).first():
+        flash('No object with such id in SQL_QUERY: ' + str(query), 'error')
+        return redirect("/index")
     result = db.session.query(SQL_QUERY).filter(SQL_QUERY.id == query).first()
     sql = result.query
     params = re.findall('\[[a-zA-Z0-9_]+\]', sql)
@@ -566,6 +584,9 @@ def raw_sql_use_need_data(query):
 
 @app.route('/query/raw_sql/use/<query>', methods = ['POST'])
 def raw_sql_use_need_data_post(query):
+    if not db.session.query(SQL_QUERY).filter(SQL_QUERY.id == query).first():
+        flash('No object with such id in SQL_QUERY: ' + str(query), 'error')
+        return redirect("/index")
     result = db.session.query(SQL_QUERY).filter(SQL_QUERY.id == query).first()
     sql = result.query
     params = re.findall('\[[a-zA-Z0-9_]+\]', sql)
