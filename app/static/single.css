@@ -1,6 +1,6 @@
 #data{
-    width:500px;
-    max-width:500px;
+    width:40%;
+    max-width:40%;
     overflow: hidden;
     margin-bottom: 10px;
     float:left;
@@ -9,16 +9,16 @@
 #delete{
     overflow: hidden;
     margin-bottom: 10px;
-    width:500px;
-    max-width:500px;
+    width:40%;
+    max-width:40%;
     float:right;
     clear:right;
 }
 #update{
     overflow: hidden;
     margin-bottom: 10px;
-    width:500px;
-    max-width:500px;
+    width:40%;
+    max-width:40%;
     float:right;
 }
 #update_button{
@@ -33,8 +33,8 @@
 #block_3{
     overflow: hidden;
     margin-bottom: 10px;
-    width:500px;
-    max-width:500px;
+    width:40%;
+    max-width:40%;
     float:left;
     clear:left;
 }
@@ -42,15 +42,15 @@
 #block_5{
     overflow: hidden;
     margin-bottom: 10px;
-    width:500px;
-    max-width:500px;
+    width:40%;
+    max-width:40%;
     float:left;
     clear:left;
 }
 
 #block_6{
-    width:500px;
-    max-width:500px;
+    width:40%;
+    max-width:40%;
     overflow: hidden;
     margin-bottom: 10px;
     float:right;
@@ -58,8 +58,8 @@
 }
 
 #block_7{
-    width:500px;
-    max-width:500px;
+    width:40%;
+    max-width:40%;
     overflow: hidden;
     margin-bottom: 10px;
     float:left;
@@ -67,8 +67,8 @@
 }
 
 #block_8{
-    width:500px;
-    max-width:500px;
+    width:40%;
+    max-width:40%;
     overflow: hidden;
     margin-bottom: 10px;
     float:right;
