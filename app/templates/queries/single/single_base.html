@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='single.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_row.css') }}">
 <center><h1>{{table}}</h1></center>
 
 <form action="/single/{{table}}/{{id}}" method="POST">
@@ -10,6 +11,7 @@
 				<summary>
 							Data
 				</summary>
+				<br>
 					{% if data %}
 						<table class="nice" cellpadding="10" border="1">
 							<tr class="nice">
@@ -35,7 +37,7 @@
 					<summary>
 								Modify this object
 					</summary>
-
+					<br>
 					<table class="nice" cellpadding="10" width="100%" border="1">
 						<tr class="nice">
 							<th class="nice">New value</th>
@@ -85,6 +87,7 @@
 				<summary>
 					Delete this object
 				</summary>
+				<br>
 				<h1><button class="button button1" name="delete" value="Delete" style="width:100%;height:70px;">Delete</button></h1>
 			</details>
 		</h1>

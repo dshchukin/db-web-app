@@ -5,6 +5,15 @@
 <form action="/query/raw_sql/use/{{query}}" method="POST">
     <center>
     <h1>Enter parameter's values</h1>
+    {% if name %}
+      <b>Name:</b> {{ name }}
+    {% endif %}
+    <br>
+    {% if description != None and description != '' %}
+      <b>Description:</b> {{ description }}
+    {% endif %}
+    <br>
+    <br>
     {% if params %}
         <table class="nice" border="1">
             <tr class="nice">

@@ -15,6 +15,8 @@ from jinja2 import *
 @app.route('/')
 @app.route('/index')
 def index():
+    date = datetime.datetime.now()
+    today = date.strftime("%d-%m-%Y")
     user = 'User'
     competitions = [
         { 
@@ -29,6 +31,7 @@ def index():
     return render_template("index.html",
         title = 'Home',
         user = user,
+        today = today,
         rand=random.randint(1, 5),
         competitions = competitions)
 
@@ -289,6 +292,49 @@ def show_single_post(table, id):
         return redirect("query/select/" + table)
     if table == "Human":
         page = "human"
+        try:
+            update_coach_request = request.form['update_coach']
+            try:
+                new_category = request.form['new_category']
+            except KeyError:
+                flash('Categoty was not defined, but \'Update\' button was pressed', 'error')
+                return show_single(table, id)
+            try:
+                new_datestart = request.form['new_datestart']
+                if new_datestart == '':
+                    flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
+                    return show_single(table, id)
+            except KeyError:
+                flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            print(db.session.query(Coach).filter(Coach.id == id).first())
+            if db.session.query(Coach).filter(Coach.id == id).first() is not None:
+                try:
+                    record = db.session.query(Coach).filter(Coach.id == id).update({'category': new_category, 'datestart': new_datestart})
+                except sqlalchemy.exc.SQLAlchemyError, exc:
+                    reason = exc.message
+                    flash('Internal error. Maybe wrong values were setted in updating coach?', 'error')
+                    return show_single(table, id)
+            else:
+                vals = [id]
+                vals.append(new_category)
+                vals.append(new_datestart)
+                record = create_new_record('Coach', vals)
+                db.session.add(record)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            return show_single(table, id)
+        except KeyError:
+            pass
+
     if table == "Structure":
         page = "structure"
         try:
@@ -474,8 +520,7 @@ def raw_sql_add_post():
                                title='Error',
                                error_message=str(reason))
     print(vals)
-    #return redirect("/query/raw_sql/use/" + str(record.id))
-    return redirect("/query/raw_sql")
+    return redirect("/query/raw_sql/use/" + str(record.id))
 
 @app.route('/query/raw_sql/use')
 def raw_sql_use():
@@ -514,6 +559,8 @@ def raw_sql_use_need_data(query):
     params = re.findall('\[[a-zA-Z0-9_]+\]', sql)
     return render_template('queries/raw_sql_use_need_data.html',
                            params=params,
+                           name=result.name,
+                           description=result.description,
                            query = query,
                            title='Raw SQL query')
 
@@ -544,6 +591,8 @@ def raw_sql_use_need_data_post(query):
                                error_message=str(reason))
     return render_template('queries/raw_sql_use_result.html',
                            params=params,
+                           name = result.name,
+                           description = result.description,
                            records = records.fetchall(),
                            title='Raw SQL query')
 

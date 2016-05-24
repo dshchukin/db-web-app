@@ -22,7 +22,27 @@
       <link rel=stylesheet type=text/css href="{{ url_for('static', filename='base.css') }}">
     </head>
       <body>
-        <div>Database manipulation: <a href="/">Homepage</a></div>
+        <div>
+        <div style="float:left"> <a class="inline-link-hover" href="/">Homepage</a></div>
+        <div style="float:right" class="inline-link">Today:
+          <script>
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1;
+            var yyyy = today.getFullYear();
+              if(dd<10) {
+                dd='0'+dd
+            }
+
+            if(mm<10) {
+                mm='0'+mm
+            }
+            today = dd +'-'+ mm +'-'+ yyyy;
+            document.write(today);
+          </script>
+        </div>
+        </div>
+        <div style="clear: both;"></div>
         <hr color="#4CAF50";>
         {% with messages = get_flashed_messages(with_categories = true) %}
         {% if messages %}
@@ -41,7 +61,7 @@
         {% block content %}{% endblock %}
       </body>
   <div id="push_footer"></div>
-  <footer>
-      Course work, Denis Shchukin, 2016. Icons by <a href="http://icons8.com">icons8.com</a>
+  <footer style="font-weight:bold;color:#6D6D6D;">
+      Course work, Denis Shchukin, 2016. Icons by <a style="font-weight:bold;color:#6D6D6D;" href="http://icons8.com">icons8.com</a>
   </footer>
 </html>

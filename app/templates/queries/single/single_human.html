@@ -2,14 +2,13 @@
 {% block single_content %}
 <h1>Not done yet</h1>
 <form action="/single/{{table}}/{{id}}" method="POST">
-{% if coach_data %}
-
     <div class="nice" id="block_3">
             <center><h1>
                 <details>
-                    <summary>sdf
+                    <summary>
                         As coach
                     </summary>
+                    <br>
                     <table class="nice" cellpadding="10" width="100%" border="1">
                         <tr class="nice">
                             <th class="nice">Category</th>
@@ -21,12 +20,22 @@
                                 <td class="nice" height="50"> {{ coach_data.datestart }} </td>
                             {% endif %}
                         </tr>
+                        <tr class="nice">
+                            {% if coach_data != None %}
+                                <td class="nice" height="50"> <input type="text" name="new_category" style="width:100%" value="{{ coach_data.category }}"></td>
+                                <td class="nice" height="50"> <input type="text" name="new_datestart" style="width:100%" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d" value="{{ coach_data.datestart }}"></td>
+                            {% else %}
+                                <td class="nice" height="50"> <input type="text" name="new_category" style="width:100%" placeholder="New category"> </td>
+                                <td class="nice" height="50"> <input type="text" name="new_datestart" style="width:100%" placeholder="New datestart:dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d"> </td>
+                            {% endif %}
+                        </tr>
                     </table>
+                    <h1><button class="button button1" name="update_coach" value="Update coach" style="width:100%;height:70px;">Update coach</button></h1>
+
                 </details>
             </h1></center>
         <p></p>
     </div>
-{% endif %}
 <!--
 {% if gyms %}
     <div id="block_5">
