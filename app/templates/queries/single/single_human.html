@@ -31,7 +31,33 @@
                         </tr>
                     </table>
                     <h1><button class="button button1" name="update_coach" value="Update coach" style="width:100%;height:70px;">Update coach</button></h1>
-
+                    Coaching history
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Sportsman</th>
+                            <th class="nice">Datestart</th>
+                            <th class="nice">Dateend</th>
+                        </tr>
+                        {% for line in coach_c_history %}
+                        <tr class="nice">
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].firstname }} {{ line[1].surname }} </a> </td>
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].datestart }} </a> </td>
+                            {% if line[0].dateend %}
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].dateend }} </a> </td>
+                            {% else %}
+                            <td class="nice" height="50">  <input type="submit" name="stop_coaching" value="Stop {{line[0].id}}" align="bottom" style="width:100%;height:100%;"> </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <h5 style="margin-bottom:5px;">Add student</h5>
+                    <select name="add_human_student" size="1">
+                        {% for line in available_student %}
+                            <option value={{line.id}}>{{line.short_data()}}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="input" type="text" name="datestart_student" placeholder="datestart: dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d">
+                    <input class="button button1" type="submit" name="add_student" value="Add" style="width:100%;height:70px;"  align="bottom">
                 </details>
             </h1></center>
         <p></p>

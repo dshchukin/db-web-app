@@ -412,6 +412,12 @@ def map_fk(table):
 			data.append(line.short_data())
 	return data
 
+x = db.session.query(Human).filter(Human.id.notin_(db.session.query(Coaching.sportsman).filter(Coaching.dateend == None)))
+for line in x:
+	print line.id
+x = db.session.query(Coaching.sportsman).filter(Coaching.dateend == None)
+for line in x:
+	print line.sportsman
 #records = db.session.execute(text('Select * from Human where id == :id'), {'id': '1'})
 #print '---records---'
 #for record in records.fetchall():
