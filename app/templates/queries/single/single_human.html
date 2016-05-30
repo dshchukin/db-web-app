@@ -88,8 +88,8 @@
                         </tr>
                         {% for line in sportsman_c_history %}
                         <tr class="nice">
-                            <td class="nice" height="50"> {{ line[2].name }} {{ line[2].surname }} </td>
-                            <td class="nice" height="50"> {{ line[0].datestart }} </td>
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].firstname }} {{ line[1].surname }} </a> </td>
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[0].datestart }} </a> </td>
                         </tr>
                         {% endfor %}
                     </table>

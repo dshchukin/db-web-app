@@ -198,7 +198,8 @@ def show_single(table, id):
         page = "human"
         coach_data = db.session.query(Coach).filter(Coach.id == id).first()
         sportsman_comp_history = db.session.query(Result_sportsman, Competition).filter(Result_sportsman.sportsman == id).filter(Competition.id == Result_sportsman.competition)
-        sportsman_c_history = db.session.query(Coaching, Coach, Human).filter(Coaching.sportsman == id).filter(Coach.id == Coaching.coach).filter(Human.id == Coach.id)
+        sportsman_c_history = db.session.query(Coaching, Human).filter(Coaching.sportsman == id).filter(Human.id == Coaching.coach)
+        coach_c_history = []
         exam_p_history = db.session.query(Examined, Exam).filter(Examined.human_id == id).filter(Examined.exam_id == Exam.id)
         exam_j_history = db.session.query(Exam).filter(Exam.id.in_(db.session.query(Examiners.exam_id).filter(Examiners.human_id == id)))
         seminar_history = db.session.query(Seminar).filter(Seminar.id.in_(db.session.query(Seminar_participating.seminar_id).filter(Seminar_participating.human_id == id)))
@@ -253,6 +254,8 @@ def show_single(table, id):
     print "returning"
     return render_template('queries/single/single_' + page +'.html',
                               id = id,
+                              sportsman_c_history = sportsman_c_history,
+                              coach_c_history = coach_c_history,
                               seminar_history = seminar_history,
                               exam_p_history = exam_p_history,
                               exam_j_history = exam_j_history,
