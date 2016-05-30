@@ -57,11 +57,9 @@ def insert_query_post():
     user = 'Denis' # user's nickname example
     table = request.form['table']
     num_of_cols = len(Base.metadata.tables[table].columns)
-    print "here"
     if len(request.form) > 2:
         vals = []
         for column in Base.metadata.tables[table].columns:
-            print column.name
             try:
                 x = request.form[column.name]
             except KeyError:
@@ -71,18 +69,14 @@ def insert_query_post():
                     error_message = "Wrong " + column.name)
             if x == '':
                 x = None
-            print('get ' + column.name + ':' + str(x) + ';')
             vals.append(x)
         db.session.commit()
-        print vals
         record = create_new_record(table, vals)
-        print vals
         db.session.add(record)
         try:
             db.session.commit()
         except sqlalchemy.exc.SQLAlchemyError, exc:
             reason = exc.message
-            print(reason)
             return render_template('error.html',
                 title = 'Error',
                 rand = random.randint(1,5),
@@ -159,14 +153,11 @@ def show_single(table, id):
     fks = []
     for col in Base.metadata.tables[table].columns:
         fk_data = None
-        # print col
         if col.foreign_keys:
             fk_data = []
             for fk in col.foreign_keys:
                 fk_data = map_fk(str(fk.column.table.name))
         fks.append(fk_data)
-    print(fks)
-    print(lines.first().data())
     page = "base"
     coaches = []
     available_examiners_exam = []
@@ -214,7 +205,6 @@ def show_single(table, id):
         nap = []
         for x in not_available_participants:
             nap.append(x[1].id)
-        print nap
         ap = db.session.query(Human).filter(Human.id.notin_(nap))
         available_participants = ap
         participants = db.session.query(Transfer, Human).filter(id == Transfer.structure, Transfer.dateend == None).filter(Transfer.human == Human.id)
@@ -253,7 +243,6 @@ def show_single(table, id):
         participants_sem = db.session.query(Seminar_participating, Human).filter(id == Seminar_participating.seminar_id).filter(Seminar_participating.human_id == Human.id)
     date = datetime.datetime.now()
     today = date.strftime("%d-%m-%Y")
-    print "returning"
     return render_template('queries/single/single_' + page +'.html',
                               id = id,
                               available_student = available_student,
@@ -297,7 +286,6 @@ def show_single_post(table, id):
     if not db.session.query(map_table(table)).filter(map_table(table).id == id).first():
         flash('No object with such id in ' + table + ": " + str(id), 'error')
         return redirect("/index")
-    print 'post'
     date = datetime.datetime.now()
     today = date.strftime("%d-%m-%Y")
     user = 'Denis' # user's nickname example
@@ -307,13 +295,10 @@ def show_single_post(table, id):
     deleted = False
     updated = False
     try:
-        print 'check update button'
         updated = request.form['update']
         updated = True
         vals = []
-        print 'update button was pressed'
         try:
-            #print 'update id=' + str(id)  + ' from ' + table
             for column in columns:
                 try:
                     x = request.form[column.name]
@@ -332,41 +317,33 @@ def show_single_post(table, id):
             db.session.commit()
         except sqlalchemy.exc.SQLAlchemyError, exc:
             reason = exc.message
-            print(reason)
             return render_template('error.html',
                                    title='Error',
                                    rand=random.randint(1, 5),
                                    user=user,
                                    error_message=str(reason))
     except KeyError:
-        print('no one updated')
+        pass
     if updated:
-        print 'updated'
         return redirect("single/" + table + '/' + str(id))
     if deleted:
-        print 'deleted'
         return redirect("query/select/" + table)
     try:
-        print 'check delete button'
         deleted = request.form['delete']
         deleted = True
-        print 'delete button was pressed'
         try:
             query = db.session.query(map_table(table)).filter(map_table(table).id == id).delete()
-            print 'delete id=' + str(id) + ' from ' + table
             db.session.commit()
         except sqlalchemy.exc.SQLAlchemyError, exc:
             reason = exc.message
-            print(reason)
             return render_template('error.html',
                                    title='Error',
                                    rand=random.randint(1, 5),
                                    user=user,
                                    error_message=str(reason))
     except KeyError:
-        print('no one deleted')
+        pass
     if deleted:
-        print 'deleted'
         return redirect("query/select/" + table)
     if table == "Human":
         page = "human"
@@ -386,7 +363,6 @@ def show_single_post(table, id):
             except KeyError:
                 flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
-            print(db.session.query(Coach).filter(Coach.id == id).first())
             if db.session.query(Coach).filter(Coach.id == id).first() is not None:
                 try:
                     record = db.session.query(Coach).filter(Coach.id == id).update({'category': new_category, 'datestart': new_datestart})
@@ -404,7 +380,6 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -428,7 +403,6 @@ def show_single_post(table, id):
             except KeyError:
                 flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
-            print(db.session.query(Sportsman).filter(Sportsman.id == id).first())
             if db.session.query(Sportsman).filter(Sportsman.id == id).first() is not None:
                 try:
                     record = db.session.query(Sportsman).filter(Sportsman.id == id).update(
@@ -447,7 +421,6 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -471,7 +444,6 @@ def show_single_post(table, id):
             except KeyError:
                 flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
-            print(db.session.query(Judge).filter(Judge.id == id).first())
             if db.session.query(Judge).filter(Judge.id == id).first() is not None:
                 try:
                     record = db.session.query(Judge).filter(Judge.id == id).update(
@@ -490,7 +462,6 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -500,7 +471,6 @@ def show_single_post(table, id):
         except KeyError:
             pass
         try:
-            print 'stopping...'
             kick_id_str = request.form['stop_coaching']
             kick_id = int(kick_id_str[5:])
             try:
@@ -514,22 +484,17 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
                                        user=user,
                                        error_message=str(reason))
-            print 'kick ' + str(kick_id)
         except KeyError:
-            print 'no one was stopped'
+            pass
         try:
             add_request = request.form['add_student']
-            print 'adding...'
             try:
                 add_human = request.form['add_human_student']
-                print 'human to add: '
-                print add_human
             except KeyError:
                 flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
@@ -548,13 +513,10 @@ def show_single_post(table, id):
             vals.append(None)
             record = create_new_record('Coaching', vals)
             db.session.add(record)
-            print vals
             try:
                 db.session.commit()
-                print 'add ' + str(vals[0])
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -562,17 +524,14 @@ def show_single_post(table, id):
                                        error_message=str(reason))
             return show_single(table, id)
         except KeyError:
-            print 'no one was added'
+            pass
     if table == "Structure":
         page = "structure"
         try:
-            print 'kicking...'
             kick_id_str = request.form['kick']
             kick_id = int(kick_id_str[5:])
             x = db.session.query(Transfer).filter(Transfer.dateend == None)
-            print x.count()
             transfer = db.session.query(Transfer).filter(Transfer.human == kick_id).filter(Transfer.dateend == None)
-            print transfer.count()
             transfer = transfer.first()
             transfer.dateend = today
             db.session.add(transfer)
@@ -580,23 +539,17 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
                                        user=user,
                                        error_message=str(reason))
-            print 'kick ' + str(kick_id)
         except KeyError:
-            print 'no one was kicked'
-
+            pass
         try:
             add_request = request.form['add']
-            print 'adding...'
             try:
                 add_human = request.form['add_human']
-                print 'human to add: '
-                print add_human
             except KeyError:
                 flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
@@ -615,13 +568,10 @@ def show_single_post(table, id):
             vals.append(None)
             record = create_new_record('Transfer', vals)
             db.session.add(record)
-            print vals
             try:
                 db.session.commit()
-                print 'add ' + str(vals[0])
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -629,14 +579,12 @@ def show_single_post(table, id):
                                        error_message=str(reason))
             return show_single(table, id)
         except KeyError:
-            print 'no one was added'
-
+            pass
         gyms = db.session.query(Gym).filter(id == Gym.structure)
         participants = db.session.query(Transfer, Human).filter(id == Transfer.human and not Transfer.dateend).filter(Transfer.human == Human.id)
     if table == "Competition":
         page = "competition"
         try:
-            print 'kicking...'
             kick_id_str = request.form['kick']
             kick_id = int(kick_id_str[7:])
             result = db.session.query(Result_sportsman).filter(Result_sportsman.id == kick_id).first()
@@ -645,23 +593,17 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
                                        user=user,
                                        error_message=str(reason))
-            print 'kick ' + str(kick_id)
         except KeyError:
-            print 'no one was kicked'
-
+            pass
         try:
             add_request = request.form['add']
-            print 'adding...'
             try:
                 add_human = request.form['add_human']
-                print 'human to add: '
-                print add_human
             except KeyError:
                 flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
@@ -679,13 +621,10 @@ def show_single_post(table, id):
             vals.append(add_human)
             record = create_new_record('Result_sportsman', vals)
             db.session.add(record)
-            print vals
             try:
                 db.session.commit()
-                print 'add ' + str(vals[0])
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -693,9 +632,8 @@ def show_single_post(table, id):
                                        error_message=str(reason))
             return show_single(table, id)
         except KeyError:
-            print 'no one was added'
+            pass
         try:
-            print 'updating result...'
             new_res_req = request.form['update_result']
             new_res = request.form['new_result']
             new_post = request.form['new_post']
@@ -708,7 +646,6 @@ def show_single_post(table, id):
             vals.append(id)
             vals.append(new_post)
             record = create_new_record('Result_judge', vals)
-            print vals
             if(db.session.query(Result_judge).filter(Result_judge.competition == id).count() == 0) :
                 db.session.add(record)
             else:
@@ -723,7 +660,6 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -734,7 +670,6 @@ def show_single_post(table, id):
     if table == "Exam":
         page = "exam"
         try:
-            print 'kicking...'
             kick_id_str = request.form['kick']
             kick_id = int(kick_id_str[5:])
             result = db.session.query(Examined).filter(Examined.human_id == kick_id).first()
@@ -743,23 +678,17 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
                                        user=user,
                                        error_message=str(reason))
-            print 'kick ' + str(kick_id)
         except KeyError:
-            print 'no one was kicked'
-
+            pass
         try:
             add_request = request.form['add']
-            print 'adding...'
             try:
                 add_human = request.form['add_human']
-                print 'human to add: '
-                print add_human
             except KeyError:
                 flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
@@ -776,15 +705,11 @@ def show_single_post(table, id):
             vals.append(id)
             vals.append(int(add_human))
             record = create_new_record('Examined', vals)
-            print record
             db.session.add(record)
-            print vals
             try:
                 db.session.commit()
-                print 'add ' + str(vals[0])
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -792,10 +717,8 @@ def show_single_post(table, id):
                                        error_message=str(reason))
             return show_single(table, id)
         except KeyError:
-            print 'no one was added'
-
+            pass
         try:
-            print 'kicking...'
             kick_id_str = request.form['kick_2']
             kick_id = int(kick_id_str[5:])
             result = db.session.query(Examiners).filter(Examiners.human_id == kick_id).first()
@@ -804,23 +727,17 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
                                        user=user,
                                        error_message=str(reason))
-            print 'kick ' + str(kick_id)
         except KeyError:
-            print 'no one was kicked'
-
+            pass
         try:
             add_request = request.form['add_2']
-            print 'adding...'
             try:
                 add_human = request.form['add_human_2']
-                print 'human to add: '
-                print add_human
             except KeyError:
                 flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
@@ -828,15 +745,11 @@ def show_single_post(table, id):
             vals.append(int(add_human))
             vals.append(id)
             record = create_new_record('Examiners', vals)
-            print record
             db.session.add(record)
-            print vals
             try:
                 db.session.commit()
-                print 'add ' + str(vals[0])
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -844,7 +757,7 @@ def show_single_post(table, id):
                                        error_message=str(reason))
             return show_single(table, id)
         except KeyError:
-            print 'no one was added'
+            pass
     if table == "Sportsman":
         page = "sportsman"
         coaches = db.session.query(Coaching, Human).filter(id == Coaching.sportsman).filter(Coaching.coach == Human.id)
@@ -855,7 +768,6 @@ def show_single_post(table, id):
     if table == "Seminar":
         page = "seminar"
         try:
-            print 'kicking...'
             kick_id_str = request.form['kick']
             kick_id = int(kick_id_str[5:])
             part = db.session.query(Seminar_participating).filter(Seminar_participating.human_id == kick_id, Seminar_participating.seminar_id == id)
@@ -865,23 +777,17 @@ def show_single_post(table, id):
                 db.session.commit()
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
                                        user=user,
                                        error_message=str(reason))
-            print 'kick ' + str(kick_id)
         except KeyError:
-            print 'no one was kicked'
-
+            pass
         try:
             add_request = request.form['add']
-            print 'adding...'
             try:
                 add_human = request.form['add_human']
-                print 'human to add: '
-                print add_human
             except KeyError:
                 flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
                 return show_single(table, id)
@@ -890,13 +796,10 @@ def show_single_post(table, id):
             vals.append(id)
             record = create_new_record('Seminar_participating', vals)
             db.session.add(record)
-            print vals
             try:
                 db.session.commit()
-                print 'add ' + str(vals[0])
             except sqlalchemy.exc.SQLAlchemyError, exc:
                 reason = exc.message
-                print(reason)
                 return render_template('error.html',
                                        title='Error',
                                        rand=random.randint(1, 5),
@@ -904,7 +807,7 @@ def show_single_post(table, id):
                                        error_message=str(reason))
             return show_single(table, id)
         except KeyError:
-            print 'no one was added'
+            pass
 
 
     return show_single(table, id)
@@ -918,7 +821,6 @@ def add(table):
     fks = []
     for col in Base.metadata.tables[table].columns:
         fk_data = None
-        # print col
         if col.foreign_keys:
             fk_data = []
             for fk in col.foreign_keys:
@@ -942,7 +844,6 @@ def add_post(table):
     num_of_cols = len(Base.metadata.tables[table].columns)
     vals = []
     for column in Base.metadata.tables[table].columns:
-        print column.name
         try:
             x = request.form[column.name]
         except KeyError:
@@ -952,9 +853,7 @@ def add_post(table):
                 error_message = "Wrong " + column.name)
         if x == '':
             x = None
-        print('get ' + column.name + ':' + str(x) + ';')
         vals.append(x)
-    print vals
     record = create_new_record(table, vals)
     db.session.add(record)
     if table == 'Seminar':
@@ -968,7 +867,6 @@ def add_post(table):
         db.session.commit()
     except sqlalchemy.exc.SQLAlchemyError, exc:
         reason = exc.message
-        print(reason)
         return render_template('error.html',
             title = 'Error',
             rand = random.randint(1,5),
@@ -1007,20 +905,15 @@ def raw_sql_add_post():
     db.session.add(record)
     try:
         db.session.commit()
-        print 'add ' + str(record.id)
     except sqlalchemy.exc.SQLAlchemyError, exc:
         reason = exc.message
-        print(reason)
         return render_template('error.html',
                                title='Error',
                                error_message=str(reason))
-    print(vals)
     return redirect("/query/raw_sql/use/" + str(record.id))
 
 @app.route('/query/raw_sql/use')
 def raw_sql_use():
-    for line in db.session.query(SQL_QUERY):
-        print line.id
     return render_template('queries/raw_sql_use.html',
                            queries = db.session.query(SQL_QUERY),
                            title='Raw SQL query')
@@ -1028,7 +921,6 @@ def raw_sql_use():
 @app.route('/query/raw_sql/use', methods = ['POST'])
 def raw_sql_use_post():
     try:
-        print 'deleting query...'
         kick_id_str = request.form['delete']
         kick_id = int(kick_id_str[7:])
         x = db.session.query(SQL_QUERY).filter(SQL_QUERY.id == kick_id).delete()
@@ -1036,12 +928,11 @@ def raw_sql_use_post():
             db.session.commit()
         except sqlalchemy.exc.SQLAlchemyError, exc:
             reason = exc.message
-            print(reason)
             return render_template('error.html',
                                    title='Error',
                                    error_message=str(reason))
     except KeyError:
-        print 'no one was deleted'
+        pass
     return render_template('queries/raw_sql_use.html',
                            queries = db.session.query(SQL_QUERY),
                            title='Raw SQL query')
@@ -1085,7 +976,6 @@ def raw_sql_use_need_data_post(query):
         records = db.session.execute(text(new_sql), vals)
     except sqlalchemy.exc.SQLAlchemyError, exc:
         reason = exc.message
-        print(reason)
         return render_template('error.html',
                                title='Error',
                                error_message=str(reason))
