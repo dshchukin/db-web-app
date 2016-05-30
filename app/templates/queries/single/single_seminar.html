@@ -1,4 +1,59 @@
 {% extends "/queries/single/single_base.html" %}
 {% block single_content %}
-<h1>Not done yet</h1>
+<form action="/single/{{table}}/{{id}}" method="POST">
+<div class="nice" id="block_3">
+            <center><h1>
+                <details>
+                    <summary>
+                        Participants
+                    </summary>
+                    <br>
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Name</th>
+                            <th class="nice">Kick</th>
+                        </tr>
+                        {% for line in participants_sem %}
+                            <tr class="nice">
+                                <td class="nice" height="50"><a href={{url_for('show_single', table = 'Human', id = line[1].id)}}> {{ line[1].short_data()}}</a></td>
+                                <td class="nice"><input type="submit" name="kick" value="Kick {{line[1].id}}" align="bottom" style="width:100%;height:100%;"></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <h5 style="margin-bottom:5px;">Add participant</h5>
+                    <select name="add_human" size="1">
+                        {% for line in available_participants_sem %}
+                            <option value={{line.id}}>{{line.short_data()}}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="button button1" type="submit" name="add" value="Add" style="width:100%;height:70px;"  align="bottom">
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+</form>
+<div class="nice" id="block_6">
+            <center><h1>
+                <details>
+                    <summary>
+                        Organizer
+                    </summary>
+                    <br>
+                    {% if org_h != None %}
+                        Human, <a href={{url_for('show_single', table = 'Human', id = org_h[1].id)}}> {{ org_h[1].firstname + " " + org_h[1].surname }}</a>
+                    {% else %}
+                        Structure, <a href={{url_for('show_single', table = 'Structure', id = org_str[1].id)}}> {{ org_str[1].name }}</a>
+                    {% endif %}
+                    <!--<h5 style="margin-bottom:5px;">Add participant</h5>
+                    <select name="add_human" size="1">
+                        {% for line in available_participants_sem %}
+                            <option value={{line.id}}>{{line.short_data()}}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="button button1" type="submit" name="add" value="Add" style="width:100%;height:70px;"  align="bottom">-->
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+</form>
 {% endblock %}

@@ -115,7 +115,8 @@ class Human(Base):
 		self.insurance_num = args.pop()
 		self.insurance_expires = args.pop()
 	def short_data(self):
-		return[int(self.id), self.firstname, self.middlename, self.surname]
+		#return[int(self.id), self.firstname, self.middlename, self.surname]
+		return [int(self.id), "" + str(self.firstname) + " " + str(self.surname)]
 	def data(self):
 		return[int(self.id), self.firstname, self.middlename, self.surname, self.birthdate, self.TIN, self.phone, self.address, self.country, self.city, self.last_medical_exam, self.insurance_num, self.insurance_expires]
 class Judge(Base):

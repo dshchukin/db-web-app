@@ -169,15 +169,41 @@ def show_single(table, id):
     print(lines.first().data())
     page = "base"
     coaches = []
+    available_examiners_exam = []
+    examiners_exam = []
     competitions = []
     gyms = []
     available_participants = []
     coach_data = []
+    sportsman_comp_history = []
+    sportsman_c_history = []
+    coach_c_history = []
+    seminar_history = []
+    exam_p_history = []
+    exam_j_history = []
+    sportsman_data = []
+    judge_data = []
     participants = []
+    available_participants_sem = []
+    participants_sem = []
+    participants_comp = []
+    available_participants_comp = []
     structures = []
+    available_participants_exam = []
+    participants_exam = []
+    org_h = None
+    org_str = None
+    result_j = None
     if table == "Human":
         page = "human"
         coach_data = db.session.query(Coach).filter(Coach.id == id).first()
+        sportsman_comp_history = db.session.query(Result_sportsman, Competition).filter(Result_sportsman.sportsman == id).filter(Competition.id == Result_sportsman.competition)
+        sportsman_c_history = db.session.query(Coaching, Coach, Human).filter(Coaching.sportsman == id).filter(Coach.id == Coaching.coach).filter(Human.id == Coach.id)
+        exam_p_history = db.session.query(Examined, Exam).filter(Examined.human_id == id).filter(Examined.exam_id == Exam.id)
+        exam_j_history = db.session.query(Exam).filter(Exam.id.in_(db.session.query(Examiners.exam_id).filter(Examiners.human_id == id)))
+        seminar_history = db.session.query(Seminar).filter(Seminar.id.in_(db.session.query(Seminar_participating.seminar_id).filter(Seminar_participating.human_id == id)))
+        sportsman_data = db.session.query(Sportsman).filter(Sportsman.id == id).first()
+        judge_data = db.session.query(Judge).filter(Judge.id == id).first()
     if table == "Structure":
         page = "structure"
         gyms = db.session.query(Gym).filter(Gym.structure == id)
@@ -191,8 +217,19 @@ def show_single(table, id):
         participants = db.session.query(Transfer, Human).filter(id == Transfer.structure, Transfer.dateend == None).filter(Transfer.human == Human.id)
     if table == "Competition":
         page = "competition"
+        participants_comp = db.session.query(Result_sportsman, Human).filter(Result_sportsman.competition == id).filter(Result_sportsman.sportsman == Human.id)
+        available_participants_comp = db.session.query(Sportsman, Human).filter(Sportsman.id == Human.id)
+        result_j = db.session.query(Result_judge).filter(Result_judge.competition == id).first()
     if table == "Exam":
         page = "exam"
+        examiners_exam = db.session.query(Examiners, Human).filter(Examiners.exam_id == id).filter(Examiners.human_id == Human.id)
+        available_examiners_exam = db.session.query(Human).filter(Human.id.notin_(db.session.query(Human.id).filter(Human.id.in_(db.session.query(Examiners.human_id).filter(Examiners.exam_id == id))))).filter(
+            Human.id.notin_(db.session.query(Human.id).filter(
+                Human.id.in_(db.session.query(Examined.human_id).filter(Examined.exam_id == id))))
+        )
+        participants_exam = db.session.query(Examined, Human).filter(Examined.exam_id == id).filter(Examined.human_id == Human.id)
+        available_participants_exam = db.session.query(Human).filter(Human.id.notin_(db.session.query(Human.id).filter(Human.id.in_(db.session.query(Examined.human_id).filter(Examined.exam_id == id))))).filter(
+            Human.id.notin_(db.session.query(Human.id).filter(Human.id.in_(db.session.query(Examiners.human_id).filter(Examiners.exam_id == id)))))
     if table == "Sportsman":
         page = "sportsman"
         coaches = db.session.query(Coaching, Human).filter(id == Coaching.sportsman).filter(Coaching.coach == Human.id)
@@ -202,18 +239,43 @@ def show_single(table, id):
         page = "coach"
     if table == "Seminar":
         page = "seminar"
+        org_h = db.session.query(Seminar, Human).filter(Seminar.id == id).filter(Human.id == Seminar.org_human).first()
+        org_str = db.session.query(Seminar, Structure).filter(Seminar.id == id).filter(Structure.id == Seminar.org_structure).first()
+        not_available_participants = db.session.query(Seminar_participating, Human).filter(Seminar_participating.seminar_id == id).filter(Seminar_participating.human_id == Human.id)
+        nap = []
+        for x in not_available_participants:
+            nap.append(x[1].id)
+        ap = db.session.query(Human).filter(Human.id.notin_(nap))
+        available_participants_sem = ap
+        participants_sem = db.session.query(Seminar_participating, Human).filter(id == Seminar_participating.seminar_id).filter(Seminar_participating.human_id == Human.id)
     date = datetime.datetime.now()
     today = date.strftime("%d-%m-%Y")
-    #print coach_data.category
-    #print coach_data.datestart
+    print "returning"
     return render_template('queries/single/single_' + page +'.html',
                               id = id,
+                              seminar_history = seminar_history,
+                              exam_p_history = exam_p_history,
+                              exam_j_history = exam_j_history,
+                              available_examiners_exam = available_examiners_exam,
+                              examiners_exam = examiners_exam,
+                              participants_exam = participants_exam,
+                              available_participants_exam = available_participants_exam,
+                              result_j = result_j,
+                              participants_comp = participants_comp,
+                              available_participants_comp = available_participants_comp,
+                              org_h = org_h,
+                              org_str = org_str,
                               today = today,
+                              sportsman_data = sportsman_data,
+                              judge_data = judge_data,
+                              sportsman_comp_history = sportsman_comp_history,
                               coach_data = coach_data,
                               title='Single object',
                               user=user,
                               participants = participants,
                               available_participants = available_participants,
+                              participants_sem = participants_sem,
+                              available_participants_sem = available_participants_sem,
                               gyms = gyms,
                               table=table,
                               coaches = coaches,
@@ -307,7 +369,8 @@ def show_single_post(table, id):
             try:
                 new_category = request.form['new_category']
             except KeyError:
-                flash('Categoty was not defined, but \'Update\' button was pressed', 'error')
+                flash('Category was not defined, but \'Update\' button was pressed', 'error')
+                flash('Category was not defined, but \'Update\' button was pressed', 'error')
                 return show_single(table, id)
             try:
                 new_datestart = request.form['new_datestart']
@@ -344,7 +407,92 @@ def show_single_post(table, id):
             return show_single(table, id)
         except KeyError:
             pass
-
+        try:
+            update_sportsman_request = request.form['update_sportsman']
+            try:
+                new_category_sportsman = request.form['new_category_sportsman']
+            except KeyError:
+                flash('Category was not defined, but \'Update\' button was pressed', 'error')
+                return show_single(table, id)
+            try:
+                new_datestart_sportsman = request.form['new_datestart_sportsman']
+                if new_datestart_sportsman == '':
+                    flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
+                    return show_single(table, id)
+            except KeyError:
+                flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            print(db.session.query(Sportsman).filter(Sportsman.id == id).first())
+            if db.session.query(Sportsman).filter(Sportsman.id == id).first() is not None:
+                try:
+                    record = db.session.query(Sportsman).filter(Sportsman.id == id).update(
+                        {'category': new_category_sportsman, 'datestart': new_datestart_sportsman})
+                except sqlalchemy.exc.SQLAlchemyError, exc:
+                    reason = exc.message
+                    flash('Internal error. Maybe wrong values were setted in updating coach?', 'error')
+                    return show_single(table, id)
+            else:
+                vals = [id]
+                vals.append(new_category_sportsman)
+                vals.append(new_datestart_sportsman)
+                record = create_new_record('Sportsman', vals)
+                db.session.add(record)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            return show_single(table, id)
+        except KeyError:
+            pass
+        try:
+            update_judge_request = request.form['update_judge']
+            try:
+                new_category_judge = request.form['new_category_judge']
+            except KeyError:
+                flash('Category was not defined, but \'Update\' button was pressed', 'error')
+                return show_single(table, id)
+            try:
+                new_datestart_judge = request.form['new_datestart_judge']
+                if new_datestart_judge == '':
+                    flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
+                    return show_single(table, id)
+            except KeyError:
+                flash('Datestart was not defined, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            print(db.session.query(Judge).filter(Judge.id == id).first())
+            if db.session.query(Judge).filter(Judge.id == id).first() is not None:
+                try:
+                    record = db.session.query(Judge).filter(Judge.id == id).update(
+                        {'category': new_category_judge, 'datestart': new_datestart_judge})
+                except sqlalchemy.exc.SQLAlchemyError, exc:
+                    reason = exc.message
+                    flash('Internal error. Maybe wrong values were setted in updating coach?', 'error')
+                    return show_single(table, id)
+            else:
+                vals = [id]
+                vals.append(new_category_judge)
+                vals.append(new_datestart_judge)
+                record = create_new_record('Judge', vals)
+                db.session.add(record)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            return show_single(table, id)
+        except KeyError:
+            pass
     if table == "Structure":
         page = "structure"
         try:
@@ -417,8 +565,216 @@ def show_single_post(table, id):
         participants = db.session.query(Transfer, Human).filter(id == Transfer.human and not Transfer.dateend).filter(Transfer.human == Human.id)
     if table == "Competition":
         page = "competition"
+        try:
+            print 'kicking...'
+            kick_id_str = request.form['kick']
+            kick_id = int(kick_id_str[7:])
+            result = db.session.query(Result_sportsman).filter(Result_sportsman.id == kick_id).first()
+            db.session.delete(result)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            print 'kick ' + str(kick_id)
+        except KeyError:
+            print 'no one was kicked'
+
+        try:
+            add_request = request.form['add']
+            print 'adding...'
+            try:
+                add_human = request.form['add_human']
+                print 'human to add: '
+                print add_human
+            except KeyError:
+                flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            try:
+                result = request.form['result']
+                if result == '':
+                    flash('Result was not defined, but \'Add\' button was pressed', 'error')
+                    return show_single(table, id)
+            except KeyError:
+                flash('Result was not defined, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            vals = [None]
+            vals.append(result)
+            vals.append(id)
+            vals.append(add_human)
+            record = create_new_record('Result_sportsman', vals)
+            db.session.add(record)
+            print vals
+            try:
+                db.session.commit()
+                print 'add ' + str(vals[0])
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            return show_single(table, id)
+        except KeyError:
+            print 'no one was added'
+        try:
+            print 'updating result...'
+            new_res_req = request.form['update_result']
+            new_res = request.form['new_result']
+            new_post = request.form['new_post']
+            vals = []
+            if (db.session.query(Result_judge).filter(Result_judge.competition == id).count() == 0):
+                vals.append(None)
+            else:
+                vals.append(db.session.query(Result_judge).filter(Result_judge.competition == id).first().id)
+            vals.append(new_res)
+            vals.append(id)
+            vals.append(new_post)
+            record = create_new_record('Result_judge', vals)
+            print vals
+            if(db.session.query(Result_judge).filter(Result_judge.competition == id).count() == 0) :
+                db.session.add(record)
+            else:
+                try:
+                    record = db.session.query(Result_judge).filter(Result_judge.competition == id).update(
+                        {'result': new_res, 'post': new_post})
+                except sqlalchemy.exc.SQLAlchemyError, exc:
+                    reason = exc.message
+                    flash('Internal error. Maybe wrong values were setted in updating result?', 'error')
+                    return show_single(table, id)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+        except KeyError:
+            pass
     if table == "Exam":
         page = "exam"
+        try:
+            print 'kicking...'
+            kick_id_str = request.form['kick']
+            kick_id = int(kick_id_str[5:])
+            result = db.session.query(Examined).filter(Examined.human_id == kick_id).first()
+            db.session.delete(result)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            print 'kick ' + str(kick_id)
+        except KeyError:
+            print 'no one was kicked'
+
+        try:
+            add_request = request.form['add']
+            print 'adding...'
+            try:
+                add_human = request.form['add_human']
+                print 'human to add: '
+                print add_human
+            except KeyError:
+                flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            try:
+                result = request.form['result']
+                if result == '':
+                    flash('Result was not defined, but \'Add\' button was pressed', 'error')
+                    return show_single(table, id)
+            except KeyError:
+                flash('Result was not defined, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            vals = [None]
+            vals.append(result)
+            vals.append(id)
+            vals.append(int(add_human))
+            record = create_new_record('Examined', vals)
+            print record
+            db.session.add(record)
+            print vals
+            try:
+                db.session.commit()
+                print 'add ' + str(vals[0])
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            return show_single(table, id)
+        except KeyError:
+            print 'no one was added'
+
+        try:
+            print 'kicking...'
+            kick_id_str = request.form['kick_2']
+            kick_id = int(kick_id_str[5:])
+            result = db.session.query(Examiners).filter(Examiners.human_id == kick_id).first()
+            db.session.delete(result)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            print 'kick ' + str(kick_id)
+        except KeyError:
+            print 'no one was kicked'
+
+        try:
+            add_request = request.form['add_2']
+            print 'adding...'
+            try:
+                add_human = request.form['add_human_2']
+                print 'human to add: '
+                print add_human
+            except KeyError:
+                flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            vals = [None]
+            vals.append(int(add_human))
+            vals.append(id)
+            record = create_new_record('Examiners', vals)
+            print record
+            db.session.add(record)
+            print vals
+            try:
+                db.session.commit()
+                print 'add ' + str(vals[0])
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            return show_single(table, id)
+        except KeyError:
+            print 'no one was added'
     if table == "Sportsman":
         page = "sportsman"
         coaches = db.session.query(Coaching, Human).filter(id == Coaching.sportsman).filter(Coaching.coach == Human.id)
@@ -428,6 +784,59 @@ def show_single_post(table, id):
         page = "coach"
     if table == "Seminar":
         page = "seminar"
+        try:
+            print 'kicking...'
+            kick_id_str = request.form['kick']
+            kick_id = int(kick_id_str[5:])
+            part = db.session.query(Seminar_participating).filter(Seminar_participating.human_id == kick_id, Seminar_participating.seminar_id == id)
+            part = part.first()
+            db.session.delete(part)
+            try:
+                db.session.commit()
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            print 'kick ' + str(kick_id)
+        except KeyError:
+            print 'no one was kicked'
+
+        try:
+            add_request = request.form['add']
+            print 'adding...'
+            try:
+                add_human = request.form['add_human']
+                print 'human to add: '
+                print add_human
+            except KeyError:
+                flash('Human for adding was not chosen, but \'Add\' button was pressed', 'error')
+                return show_single(table, id)
+            vals = [None]
+            vals.append(add_human)
+            vals.append(id)
+            record = create_new_record('Seminar_participating', vals)
+            db.session.add(record)
+            print vals
+            try:
+                db.session.commit()
+                print 'add ' + str(vals[0])
+            except sqlalchemy.exc.SQLAlchemyError, exc:
+                reason = exc.message
+                print(reason)
+                return render_template('error.html',
+                                       title='Error',
+                                       rand=random.randint(1, 5),
+                                       user=user,
+                                       error_message=str(reason))
+            return show_single(table, id)
+        except KeyError:
+            print 'no one was added'
+
+
     return show_single(table, id)
 
 

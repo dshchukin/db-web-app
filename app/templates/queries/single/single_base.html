@@ -2,6 +2,10 @@
 {% block content %}
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='single.css') }}">
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='clickable_row.css') }}">
+
+<script type="text/javascript" src="{{ url_for('static', filename='details-shim-master/details-shim.min.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='details-shim-master/details-shim.min.css') }}">
+
 <center><h1>{{table}}</h1></center>
 
 <form action="/single/{{table}}/{{id}}" method="POST">

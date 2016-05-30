@@ -36,29 +36,165 @@
             </h1></center>
         <p></p>
     </div>
-<!--
-{% if gyms %}
-    <div id="block_5">
+    <div class="nice" id="block_5">
             <center><h1>
                 <details>
                     <summary>
-                        Gyms
+                        As sportsman
                     </summary>
-                        <table cellpadding="10" width="100%" border="1">
-                            <tr>
-                                <th>Gym</th>
-                            </tr>
-                            {% for line in gyms %}
-                                <tr>
-                                    <td height="50"><a href={{url_for('show_single', table = 'Gym', id = line.id)}}> {{ line.address}}</a></td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                    <br>
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Category</th>
+                            <th class="nice">Datestart</th>
+                        </tr>
+                        <tr class="nice">
+                            {% if sportsman_data.category != None %}
+                                <td class="nice" height="50"> {{ sportsman_data.category }} </td>
+                                <td class="nice" height="50"> {{ sportsman_data.datestart }} </td>
+                            {% endif %}
+                        </tr>
+                        <tr class="nice">
+                            {% if coach_data != None %}
+                                <td class="nice" height="50"> <input class="input" type="text" name="new_category_sportsman" style="width:100%" value="{{ sportsman_data.category.category }}"></td>
+                                <td class="nice" height="50"> <input class="input" type="text" name="new_datestart_sportsman" style="width:100%" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d" value="{{ sportsman_data.category.datestart }}"></td>
+                            {% else %}
+                                <td class="nice" height="50"> <input class="input" type="text" name="new_category_sportsman" style="width:100%" placeholder="New category"> </td>
+                                <td class="nice" height="50"> <input class="input" type="text" name="new_datestart_sportsman" style="width:100%" placeholder="New datestart:dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d"> </td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                    <h1><button class="button button1" name="update_sportsman" value="Update sportsman" style="width:100%;height:70px;">Update sportsman</button></h1>
+                    Competitive history
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Competition</th>
+                            <th class="nice">Datestart</th>
+                            <th class="nice">Result</th>
+                        </tr>
+                        {% for line in sportsman_comp_history %}
+                        <tr class="nice">
+                            <td class="nice" height="50"> {{ line[1].name }} </td>
+                            <td class="nice" height="50"> {{ line[1].datestart }} </td>
+                            <td class="nice" height="50"> {{ line[0].result }} </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    Coaching history
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Coach</th>
+                            <th class="nice">Datestart</th>
+                        </tr>
+                        {% for line in sportsman_c_history %}
+                        <tr class="nice">
+                            <td class="nice" height="50"> {{ line[2].name }} {{ line[2].surname }} </td>
+                            <td class="nice" height="50"> {{ line[0].datestart }} </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 </details>
             </h1></center>
         <p></p>
     </div>
-{% endif %}
--->
+    <div class="nice" id="block_6">
+            <center><h1>
+                <details>
+                    <summary>
+                        As judge
+                    </summary>
+                    <br>
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Category</th>
+                            <th class="nice">Datestart</th>
+                        </tr>
+                        <tr class="nice">
+                            {% if coach_data != None %}
+                                <td class="nice" height="50"> {{ judge_data.category }} </td>
+                                <td class="nice" height="50"> {{ judge_data.datestart }} </td>
+                            {% endif %}
+                        </tr>
+                        <tr class="nice">
+                            {% if coach_data != None %}
+                                <td class="nice" height="50"> <input class="input" type="text" name="new_category_judge" style="width:100%" value="{{ judge_data.category }}"></td>
+                                <td class="nice" height="50"> <input class="input" type="text" name="new_datestart_judge" style="width:100%" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d" value="{{ judge_data.datestart }}"></td>
+                            {% else %}
+                                <td class="nice" height="50"> <input class="input" type="text" name="new_category_judge" style="width:100%" placeholder="New category"> </td>
+                                <td class="nice" height="50"> <input class="input" type="text" name="new_datestart_judge" style="width:100%" placeholder="New datestart:dd-mm-yyyy" pattern="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d"> </td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                    <h1><button class="button button1" name="update_judge" value="Update judge" style="width:100%;height:70px;">Update coach</button></h1>
+
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+    <div class="nice" id="block_7">
+            <center><h1>
+                <details>
+                    <summary>
+                        Seminars
+                    </summary>
+                    <br>
+                    Participated
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Name</th>
+                            <th class="nice">Place</th>
+                            <th class="nice">Datestart</th>
+                        </tr>
+                        {% for line in seminar_history %}
+                        <tr class="nice">
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Seminar', id = line.id)}}> {{ line.name }} </a> </td>
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Seminar', id = line.id)}}> {{ line.place }} </a> </td>
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Seminar', id = line.id)}}> {{ line.datestart }} </a> </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
+    <div class="nice" id="block_8">
+            <center><h1>
+                <details>
+                    <summary>
+                        Exams
+                    </summary>
+                    <br>
+                    Participated
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Date</th>
+                            <th class="nice">Place</th>
+                            <th class="nice">Result</th>
+                        </tr>
+                        {% for line in exam_p_history %}
+                        <tr class="nice">
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Exam', id = line[1].id)}}> {{ line[1].date }} </a> </td>
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Exam', id = line[1].id)}}> {{ line[1].place }} </a> </td>
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Exam', id = line[1].id)}}> {{ line[0].result }} </a> </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    Judged
+                    <table class="nice" cellpadding="10" width="100%" border="1">
+                        <tr class="nice">
+                            <th class="nice">Date</th>
+                            <th class="nice">Place</th>
+                        </tr>
+                        {% for line in exam_j_history %}
+                        <tr class="nice">
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Exam', id = line.id)}}> {{ line.date }} </a> </td>
+                            <td class="nice" height="50"> <a href={{url_for('show_single', table = 'Exam', id = line.id)}}> {{ line.place }} </a> </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </details>
+            </h1></center>
+        <p></p>
+    </div>
 </form>
 {% endblock %}
